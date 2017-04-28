@@ -1101,15 +1101,25 @@ struct ssd_info *no_buffer_distribute(struct ssd_info *ssd)
 	lpn=req->lsn/ssd->parameter->subpage_page;
 	last_lpn=(req->lsn+req->size-1)/ssd->parameter->subpage_page;
 	first_lpn=req->lsn/ssd->parameter->subpage_page;
-
+	//the time overhead of a request is decided by its most slow subrequest
 	//todo: handle read request
+	//just read and update lru
 	if(req->operation==READ)        
 	{		
 		while(lpn<=last_lpn) 		
 		{
 			sub_state=(ssd->dram->map->map_entry[lpn].state&0x7fffffff);
 			sub_size=size(sub_state);
-			sub=creat_sub_request(ssd,lpn,sub_size,sub_state,req,req->operation);
+            //filter read request
+            //todo: more judge to confirm the page is in nvm
+            if(ssd->dram->nvm_map->map_entry[lpn].state != 0){
+				//todo: here read from nvm, update time, update lru
+				req->begin_time=ssd->current_time;
+				req->response_time=ssd->current_time+1000;
+
+			} else {
+				sub = creat_sub_request(ssd, lpn, sub_size, sub_state, req, req->operation);
+			}
 			lpn++;
 		}
 	}

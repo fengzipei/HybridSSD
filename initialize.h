@@ -150,8 +150,13 @@ struct ac_time_characteristics{
 	int tRST;      //device resetting time
 }ac_timing;
 
+struct nvm_page{
+	int valid_state;
+	int free_state;
+	int lpn;
+};
 
-struct ssd_info{ 
+struct ssd_info{
 	double ssd_energy;                   //SSD的能耗，是时间和芯片数的函数,能耗因子
 	int64_t current_time;                //记录系统时间
 	int64_t next_request_time;
@@ -211,6 +216,7 @@ struct ssd_info{
 	struct sub_request *subs_w_tail;
 	struct event_node *event;            //事件队列，每产生一个新的事件，按照时间顺序加到这个队列，在simulate函数最后，根据这个队列队首的时间，确定时间
 	struct channel_info *channel_head;   //指向channel结构体数组的首地址
+    struct nvm_page *nvm_head;
 };
 
 
@@ -294,6 +300,12 @@ struct page_info{                      //lpn记录该物理页存储的逻辑页，当该逻辑页
 	unsigned int written_count;        //记录该页被写的次数
 };
 
+//todo: here I need to implement LRU algorithm: link these map entry
+struct nvm_map_info {
+	struct entry *map_entry;
+	int valid_page_num;
+	struct entry *lru_head, *lru_tail;
+};
 
 struct dram_info{
 	unsigned int dram_capacity;     
@@ -301,8 +313,9 @@ struct dram_info{
 
 	struct dram_parameter *dram_paramters;      
 	struct map_info *map;
+	//don't care about buffer in dram
 	struct buffer_info *buffer; 
-
+	struct nvm_map_info *nvm_map;
 };
 
 
@@ -334,10 +347,11 @@ struct dram_parameter{
 	int clock_time;
 };
 
-
+//todo: here I need to implement LRU algorithm: link these map entry
 struct map_info{
 	struct entry *map_entry;            //该项是映射表结构体指针,each entry indicate a mapping information
 	struct buffer_info *attach_info;	// info about attach map
+	struct entry *lru_head, *lru_tail;
 };
 
 
@@ -402,6 +416,7 @@ struct event_node{
 };
 
 struct parameter_value{
+	unsigned int nvm_page_num; // page number in nvm
 	unsigned int chip_num;          //记录一个SSD中有多少个颗粒
 	unsigned int dram_capacity;     //记录SSD中DRAM capacity
 	unsigned int cpu_sdram;         //记录片内有多少
@@ -468,7 +483,8 @@ struct parameter_value{
 /********************************************************
 *mapping information,state的最高位表示是否有附加映射关系
 *********************************************************/
-struct entry{                       
+struct entry{
+    struct entry *pre, *post;
 	unsigned int pn;                //物理号，既可以表示物理页号，也可以表示物理子页号，也可以表示物理块号
 	int state;                      //十六进制表示的话是0000-FFFF，每位表示相应的子页是否有效（页映射）。比如在这个页中，0，1号子页有效，2，3无效，这个应该是0x0003.
 };

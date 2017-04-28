@@ -119,7 +119,15 @@ struct ssd_info *initiation(struct ssd_info *ssd)
 	alloc_assert(ssd->channel_head,"ssd->channel_head");
 	memset(ssd->channel_head,0,ssd->parameter->channel_number * sizeof(struct channel_info));
 	initialize_channels(ssd );
-	
+
+	//initialize nvm
+	ssd->nvm_head = (struct nvm_page *)malloc(ssd->parameter->nvm_page_num * sizeof(struct nvm_page));
+	alloc_assert(ssd->nvm_head, "ssd->nvm_head");
+	for(i = 0; i < ssd->parameter->nvm_page_num; i++){
+		ssd->nvm_head[i].free_state = 0;
+		ssd->nvm_head[i].valid_state = 0;
+		ssd->nvm_head[i].lpn = 0;
+	}
 
 	printf("\n");
 	ssd->outputfile=fopen(ssd->outputfilename,"w");
@@ -181,7 +189,7 @@ struct ssd_info *initiation(struct ssd_info *ssd)
 	return ssd;
 }
 
-
+//todo: initialize map info, need to be modified later
 struct dram_info * initialize_dram(struct ssd_info * ssd)
 {
 	unsigned int page_num;
@@ -192,15 +200,23 @@ struct dram_info * initialize_dram(struct ssd_info * ssd)
 	dram->buffer->max_buffer_sector=ssd->parameter->dram_capacity/SECTOR; //512
 
 	dram->map = (struct map_info *)malloc(sizeof(struct map_info));
+    dram->nvm_map = (struct nvm_map_info *)malloc(sizeof(struct nvm_map_info));
 	alloc_assert(dram->map,"dram->map");
 	memset(dram->map,0, sizeof(struct map_info));
+	alloc_assert(dram->nvm_map,"dram->map");
+	memset(dram->nvm_map,0, sizeof(struct nvm_map_info));
 
 	page_num = ssd->parameter->page_block*ssd->parameter->block_plane*ssd->parameter->plane_die*ssd->parameter->die_chip*ssd->parameter->chip_num;
 
 	dram->map->map_entry = (struct entry *)malloc(sizeof(struct entry) * page_num); //每个物理页和逻辑页都有对应关系
+	dram->nvm_map->map_entry = (struct entry *)malloc(sizeof(struct entry) * page_num); //每个物理页和逻辑页都有对应关系
 	alloc_assert(dram->map->map_entry,"dram->map->map_entry");
 	memset(dram->map->map_entry,0,sizeof(struct entry) * page_num);
-	
+	alloc_assert(dram->nvm_map->map_entry,"dram->nvm_map->map_entry");
+	memset(dram->nvm_map->map_entry,0,sizeof(struct entry) * page_num);
+
+	dram->nvm_map->valid_page_num = ssd->parameter->nvm_page_num;
+
 	return dram;
 }
 
@@ -553,6 +569,8 @@ struct parameter_value *load_parameters(char parameter_file[30])
 			sscanf(buf + next_eql,"%d",&p->aged); 
 		}else if((res_eql=strcmp(buf,"aged ratio")) ==0){
 			sscanf(buf + next_eql,"%f",&p->aged_ratio); 
+		}else if((res_eql=strcmp(buf,"nvm page")) == 0){
+			sscanf(buf + next_eql,"%d",&p->nvm_page_num);
 		}else if((res_eql=strcmp(buf,"queue_length")) ==0){
 			sscanf(buf + next_eql,"%d",&p->queue_length); 
 		}else if((res_eql=strncmp(buf,"chip number",11)) ==0)
