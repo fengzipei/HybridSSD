@@ -363,6 +363,8 @@ struct controller_info{
 
 
 struct request{
+    int64_t nvm_start_time;
+    int64_t nvm_end_time;
 	int64_t time;                      //请求到达的时间，单位为us,这里和通常的习惯不一样，通常的是ms为单位，这里需要有个单位变换过程
 	unsigned int lsn;                  //请求的起始地址，逻辑地址
 	unsigned int size;                 //请求的大小，既多少个扇区
@@ -379,6 +381,7 @@ struct request{
 
 	struct sub_request *subs;          //链接到属于该请求的所有子请求
 	struct request *next_node;         //指向下一个请求结构体
+
 };
 
 

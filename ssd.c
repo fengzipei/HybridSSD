@@ -242,7 +242,8 @@ int get_requests(struct ssd_info *ssd)
 	request1 = (struct request*)malloc(sizeof(struct request));
 	alloc_assert(request1,"request");
 	memset(request1,0, sizeof(struct request));
-
+	request1->nvm_start_time = time_t;
+	request1->nvm_end_time = time_t;
 	request1->time = time_t;
 	request1->lsn = lsn;
 	request1->size = size;
@@ -636,6 +637,7 @@ void trace_output(struct ssd_info* ssd){
 			flag=1;
 			while(sub != NULL)
 			{
+
 				if(start_time == 0)
 					start_time = sub->begin_time;
 				if(start_time > sub->begin_time)
@@ -1114,17 +1116,17 @@ struct ssd_info *no_buffer_distribute(struct ssd_info *ssd)
             //todo: more judge to confirm the page is in nvm
             if(ssd->dram->nvm_map->map_entry[lpn].state != 0){
 				//todo: here read from nvm, update time, update lru
-				req->begin_time=ssd->current_time;
-				req->response_time=ssd->current_time+1000;
+				if(req->nvm_start_time <= ssd->current_time){
 
+				}
+				req->nvm_start_time = ssd->current_time;
+				req->nvm_end_time = ssd->current_time + 100;
 			} else {
 				sub = creat_sub_request(ssd, lpn, sub_size, sub_state, req, req->operation);
 			}
 			lpn++;
 		}
-	}
-		//todo: handle write request
-	else if(req->operation==WRITE)
+	}else if(req->operation==WRITE) //todo: handle write request
 	{
 		while(lpn<=last_lpn)     	
 		{	
