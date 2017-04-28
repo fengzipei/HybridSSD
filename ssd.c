@@ -40,8 +40,10 @@ int  main()
 	alloc_assert(ssd,"ssd");
 	memset(ssd,0, sizeof(struct ssd_info));
 
+	//todo 1: read parameters related to nvm from configure file (done)
 	ssd=initiation(ssd);
 	make_aged(ssd);
+    //todo 2: pre process nvm & flash (done)
 	pre_process_page(ssd);
 
 	for (i=0;i<ssd->parameter->channel_number;i++)
@@ -56,8 +58,9 @@ int  main()
 	}
 	fprintf(ssd->outputfile,"\t\t\t\t\t\t\t\t\tOUTPUT\n");
 	fprintf(ssd->outputfile,"****************** TRACE INFO ******************\n");
-
+	//todo 3: handle most of things
 	ssd=simulate(ssd);
+	//todo 4: output information about nvm
 	statistic_output(ssd);  
 /*	free_all_node(ssd);*/
 
@@ -103,7 +106,6 @@ struct ssd_info *simulate(struct ssd_info *ssd)
 	{
         
 		flag=get_requests(ssd);
-		/*********************************todo**************************************/
 		if(flag == 1)
 		{   
 			//printf("once\n");
@@ -114,11 +116,11 @@ struct ssd_info *simulate(struct ssd_info *ssd)
 			} 
 			else
 			{
+				//todo: handle every request
 				no_buffer_distribute(ssd);
 			}		
 		}
-		/*******************************todo****************************************/
-		process(ssd);    
+		process(ssd);
 		trace_output(ssd);
 		if(flag == 0 && ssd->request_queue == NULL)
 			flag = 100;
@@ -162,7 +164,10 @@ int get_requests(struct ssd_info *ssd)
 	filepoint = ftell(ssd->tracefile);	
 	fgets(buffer, 200, ssd->tracefile); 
 	sscanf(buffer,"%lld %d %d %d %d",&time_t,&device,&lsn,&size,&ope);
-    
+
+
+
+
 	if ((device<0)&&(lsn<0)&&(size<0)&&(ope<0))
 	{
 		return 100;
@@ -1097,6 +1102,7 @@ struct ssd_info *no_buffer_distribute(struct ssd_info *ssd)
 	last_lpn=(req->lsn+req->size-1)/ssd->parameter->subpage_page;
 	first_lpn=req->lsn/ssd->parameter->subpage_page;
 
+	//todo: handle read request
 	if(req->operation==READ)        
 	{		
 		while(lpn<=last_lpn) 		
@@ -1107,6 +1113,7 @@ struct ssd_info *no_buffer_distribute(struct ssd_info *ssd)
 			lpn++;
 		}
 	}
+		//todo: handle write request
 	else if(req->operation==WRITE)
 	{
 		while(lpn<=last_lpn)     	
