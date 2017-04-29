@@ -190,7 +190,7 @@ void initialize_lru(struct ssd_info *ssd) {
     ssd->dram->nvm_map->count = 0;
     unsigned int page_num = ssd->parameter->page_block * ssd->parameter->block_plane * ssd->parameter->plane_die *
                    ssd->parameter->die_chip * ssd->parameter->chip_num;
-    ssd->dram->map->capacity = page_num;
+    ssd->dram->map->capacity = ssd->parameter->migrate_threshold;
     ssd->dram->map->count = 0;
     ssd->dram->nvm_map->lru_head = (struct entry *)malloc(sizeof(struct entry));
     ssd->dram->nvm_map->lru_tail = (struct entry *)malloc(sizeof(struct entry));
@@ -539,6 +539,10 @@ struct parameter_value *load_parameters(char parameter_file[30]) {
             sscanf(buf + next_eql, "%d", &p->pipelining);
         } else if ((res_eql = strcmp(buf, "time_step")) == 0) {
             sscanf(buf + next_eql, "%d", &p->time_step);
+        } else if ((res_eql = strcmp(buf, "remain threshold")) == 0) {
+            sscanf(buf + next_eql, "%d", &p->remain_threshold);
+        } else if ((res_eql = strcmp(buf, "migrate threshold")) == 0) {
+            sscanf(buf + next_eql, "%d", &p->migrate_threshold);
         } else if ((res_eql = strcmp(buf, "small large write")) == 0) {
             sscanf(buf + next_eql, "%d", &p->small_large_write);
         } else if ((res_eql = strcmp(buf, "active write threshold")) == 0) {

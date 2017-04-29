@@ -238,7 +238,7 @@ struct ssd_info *pre_process_page(struct ssd_info *ssd) {
                         //here we simpily put these page in nvm sequentily
                         //todo: program & read count is needed to add later
                         ppn = position_in_nvm;
-                        ssd->program_count++;
+                        ssd->nvm_write_count++;
                         ssd->dram->nvm_map->map_entry[lpn].pn = ppn;
                         ssd->dram->nvm_map->map_entry[lpn].state = set_entry_state(ssd, lsn, sub_size);   //0001
                         position_in_nvm++;
@@ -282,7 +282,7 @@ struct ssd_info *pre_process_page(struct ssd_info *ssd) {
                     map_entry_new = set_entry_state(ssd, lsn, sub_size);
                     map_entry_old = ssd->dram->map->map_entry[lpn].state;
                     modify = map_entry_new | map_entry_old;
-                    ssd->program_count++;
+                    ssd->nvm_write_count++;
                     ssd->dram->nvm_map->map_entry[lpn].state = modify;
                 }
                 lsn = lsn + sub_size;                                         /*下个子请求的起始位置*/

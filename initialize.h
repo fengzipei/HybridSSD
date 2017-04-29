@@ -173,6 +173,8 @@ struct ssd_info{
 	int64_t write_avg;                   //记录用于计算写请求平均响应时间的时间
 	int64_t read_avg;                    //记录用于计算读请求平均响应时间的时间
 
+    unsigned int nvm_write_count;
+    unsigned int nvm_read_count;
 	unsigned int min_lsn;
 	unsigned int max_lsn;
 	unsigned long read_count;
@@ -305,13 +307,13 @@ struct nvm_map_info {
 	struct entry *map_entry;
 	int valid_page_num;
 	struct entry *lru_head, *lru_tail;
+	unsigned int trace;
     unsigned int count, capacity; //count: number of node in lru list, capacity: max lenght of lru list
 };
 
 struct dram_info{
 	unsigned int dram_capacity;     
 	int64_t current_time;
-
 	struct dram_parameter *dram_paramters;      
 	struct map_info *map;
 	//don't care about buffer in dram
@@ -421,6 +423,10 @@ struct event_node{
 };
 
 struct parameter_value{
+	//when a page remains in the first <migrate_threshold> position of flash lru list for <reamain_threshold> request unit,
+	// migrate this page from flash to nvm
+    unsigned int migrate_threshold;
+	unsigned int remain_threshold;
 	unsigned int nvm_page_num; // page number in nvm
 	unsigned int chip_num;          //记录一个SSD中有多少个颗粒
 	unsigned int dram_capacity;     //记录SSD中DRAM capacity
@@ -492,6 +498,7 @@ struct entry{
     struct entry *pre, *post;
 	unsigned int pn;                //物理号，既可以表示物理页号，也可以表示物理子页号，也可以表示物理块号
 	int state;                      //十六进制表示的话是0000-FFFF，每位表示相应的子页是否有效（页映射）。比如在这个页中，0，1号子页有效，2，3无效，这个应该是0x0003.
+	int remain_count; // the request unit the page is in the first <remain_threshold> postion of flash lru list
 };
 
 

@@ -87,3 +87,5 @@ greed MPW command=1;            #1 for using multi-plane write greedily, 0 for n
 aged=0;                         #1 for making SSD aged, 0 for keeping SSD non-aged
 aged ratio=0.7;                #If we need to make SSD aged, set the aged ratio in advance
 nvm page = 65535 # the capacity of nvm is 256MB
+migrate_threshold = 5;
+remain_threshold = 5;
