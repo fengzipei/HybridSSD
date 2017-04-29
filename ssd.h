@@ -24,6 +24,8 @@ Hao Luo         2011/01/01        2.0           Change               luohao13568
 #include "flash.h"
 #include "pagemap.h"
 
+#define DEBUG 1
+
 #define MAX_INT64  0x7fffffffffffffffll
 
 struct ssd_info *simulate(struct ssd_info *);

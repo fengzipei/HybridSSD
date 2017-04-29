@@ -4,14 +4,15 @@
     <file url="file://$PROJECT_DIR$/avlTree.c" charset="GBK" />
     <file url="file://$PROJECT_DIR$/avlTree.h" charset="GBK" />
     <file url="file://$PROJECT_DIR$/cmake-build-debug/page.parameters" charset="GBK" />
-    <file url="file://$PROJECT_DIR$/flash.c" charset="GBK" />
+    <file url="file://$PROJECT_DIR$/flash.c" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/flash.h" charset="GBK" />
-    <file url="file://$PROJECT_DIR$/initialize.c" charset="GBK" />
-    <file url="file://$PROJECT_DIR$/initialize.h" charset="GBK" />
+    <file url="file://$PROJECT_DIR$/initialize.c" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/initialize.h" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/page.parameters" charset="GBK" />
-    <file url="file://$PROJECT_DIR$/pagemap.c" charset="GBK" />
-    <file url="file://$PROJECT_DIR$/pagemap.h" charset="GBK" />
-    <file url="file://$PROJECT_DIR$/ssd.c" charset="GBK" />
+    <file url="file://$PROJECT_DIR$/pagemap.c" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/pagemap.h" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/ssd.c" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/ssd.h" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/../SSDsim_origin/cmake-build-debug/page.parameters" charset="UTF-8" />
   </component>
 </project>
