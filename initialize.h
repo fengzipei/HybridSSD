@@ -305,6 +305,7 @@ struct nvm_map_info {
 	struct entry *map_entry;
 	int valid_page_num;
 	struct entry *lru_head, *lru_tail;
+    unsigned int count, capacity; //count: number of node in lru list, capacity: max lenght of lru list
 };
 
 struct dram_info{
@@ -352,6 +353,7 @@ struct map_info{
 	struct entry *map_entry;            //该项是映射表结构体指针,each entry indicate a mapping information
 	struct buffer_info *attach_info;	// info about attach map
 	struct entry *lru_head, *lru_tail;
+    unsigned int count, capacity; //count: number of node in lru list, capacity: max length of lru list
 };
 
 
@@ -552,6 +554,7 @@ struct die_info * initialize_die(struct die_info * p_die,struct parameter_value 
 struct chip_info * initialize_chip(struct chip_info * p_chip,struct parameter_value *parameter,long long current_time );
 struct ssd_info * initialize_channels(struct ssd_info * ssd );
 struct dram_info * initialize_dram(struct ssd_info * ssd);
+void initialize_lru(struct ssd_info *ssd);
 
 #endif
 
