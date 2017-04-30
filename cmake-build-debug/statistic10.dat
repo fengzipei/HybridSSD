@@ -90,6 +90,8 @@ greed MPW command=1;            #1 for using multi-plane write greedily, 0 for n
 aged=0;                         #1 for making SSD aged, 0 for keeping SSD non-aged
 aged ratio=0.7;                #If we need to make SSD aged, set the aged ratio in advance
 nvm page = 65535 # the capacity of nvm is 256MB
+migrate threshold = 5;
+remain threshold = 5;
 -----------------------simulation output----------------------
 the 0 channel, 0 chip, 0 die, 2048 plane has :             0 erase operations
 the 0 channel, 0 chip, 1 die, 2048 plane has :             0 erase operations
@@ -104,9 +106,9 @@ the 1 channel, 1 chip, 1 die, 2048 plane has :             0 erase operations
 ---------------------------statistic data---------------------------
 min lsn:           132
 max lsn:       1002411
-nvm read count:          1693
+nvm read count:          1695
 nvm program count:         11757
-read count:         13835
+read count:         13837
 program count:         21409                        include the flash write count leaded by read requests
 the read operation leaded by un-covered update count:           795
 erase count:             0
@@ -128,7 +130,7 @@ read request count:          4077
 write request count:          5922
 read request average size:     12.187184
 write request average size:      9.841733
-read request average response time: 129812
+read request average response time: 129977
 write request average response time: 89289
 buffer read hits:             0
 buffer read miss:             0

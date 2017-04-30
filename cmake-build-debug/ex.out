@@ -90,6 +90,8 @@ greed MPW command=1;            #1 for using multi-plane write greedily, 0 for n
 aged=0;                         #1 for making SSD aged, 0 for keeping SSD non-aged
 aged ratio=0.7;                #If we need to make SSD aged, set the aged ratio in advance
 nvm page = 65535 # the capacity of nvm is 256MB
+migrate threshold = 5;
+remain threshold = 5;
 -----------------------simulation output----------------------
 chip:0,die:0,plane:0 have free page: 130656
 chip:0,die:0,plane:1 have free page: 130657
@@ -214,7 +216,7 @@ chip:1,die:1,plane:1 have free page: 130657
       4731699218     618167      1  1       4731699218       4731699318        100
       4744805664     303821      7  0       4744805664       4744805964        300
       4744805664      55674      6  0       4744805664       4744805964        300
-      4757913085     618168     16  1       4757913085       4758035660     122575
+      4757913085     618168     16  1       4757913085       4758849610     936525
       4764466796     303828      7  0       4764466796       4764467096        300
       4764466796     240840      6  0       4764466796       4764467096        300
       4810341796      55692      6  1       4810341796       4810341896        100
@@ -2362,7 +2364,7 @@ chip:1,die:1,plane:1 have free page: 130657
      61420335937     618378      1  1      61420335937      61420407312      71375
      62285414062     618858      1  1      62285414062      62285414162        100
      62947328125     618684      1  1      62947328125      62947361100      32975
-     62980093750     618172      1  1      62980093750      62980165125      71375
+     62980093750     618172      1  1      62980093750      62980093850        100
      63006308593     619103      1  1      63006308593      63006308693        100
      63157042968     618336      1  1      63157042968      63157043068        100
      63425738281     306777      7  0      63425738281      63425738581        300
@@ -4077,7 +4079,7 @@ chip:1,die:1,plane:1 have free page: 130657
     126445156250      56172      6  0     126445156250     126445156550        300
     126445156250      56178      6  0     126445156250     126445156550        300
     126445156250     308729     43  0     126445156250     126445710375     554125
-    126464820312     618183      1  1     126464820312     126464891687      71375
+    126464820312     618183      1  1     126464820312     126464820412        100
     126484484375     308772      7  0     126484484375     126484484675        300
     126484484375     206334      6  0     126484484375     126484484675        300
     126491039062     818037      6  0     126491039062     126491039362        300
@@ -10114,9 +10116,11 @@ the 1 channel, 1 chip, 1 die, 2048 plane has :             0 erase operations
 ---------------------------statistic data---------------------------
 min lsn:           132
 max lsn:       1002411
-nvm read count:          1693
+migrate threshold:             5
+remain threshold:             5
+nvm read count:          1695
 nvm program count:         11757
-read count:         13835
+read count:         13837
 program count:         21409
                         include the flash write count leaded by read requests
 the read operation leaded by un-covered update count:           795
@@ -10138,7 +10142,7 @@ read request count:          4077
 write request count:          5922
 read request average size:     12.187184
 write request average size:      9.841733
-read request average response time: 129812
+read request average response time: 129977
 write request average response time: 89289
 buffer read hits:             0
 buffer read miss:             0

@@ -900,10 +900,8 @@ Status move_page(struct ssd_info *ssd, struct local *location, unsigned int *tra
                        location->page);      /*记录这个有效移动页的ppn，对比map或者额外映射关系中的ppn，进行删除和添加操作*/
     ppn = get_ppn_for_gc(ssd, location->channel, location->chip, location->die,
                          location->plane);                /*找出来的ppn一定是在发生gc操作的plane中,才能使用copyback操作，为gc操作获取ppn*/
-
     new_location = find_location(ssd,
                                  ppn);                                                                   /*根据新获得的ppn获取new_location*/
-
     if ((ssd->parameter->advanced_commands & AD_COPYBACK) == AD_COPYBACK) {
         if (ssd->parameter->greed_CB_ad ==
             1)                                                                /*贪婪地使用高级命令*/

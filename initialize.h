@@ -306,7 +306,7 @@ struct page_info{                      //lpn记录该物理页存储的逻辑页
 struct nvm_map_info {
 	struct entry *map_entry;
 	int valid_page_num;
-	struct entry *lru_head, *lru_tail;
+	struct entry *lru_head, *lru_tail; //this lru will decide which page will be migrate from nvm
 	unsigned int trace;
     unsigned int count, capacity; //count: number of node in lru list, capacity: max lenght of lru list
 };
@@ -499,6 +499,7 @@ struct entry{
 	unsigned int pn;                //物理号，既可以表示物理页号，也可以表示物理子页号，也可以表示物理块号
 	int state;                      //十六进制表示的话是0000-FFFF，每位表示相应的子页是否有效（页映射）。比如在这个页中，0，1号子页有效，2，3无效，这个应该是0x0003.
 	int remain_count; // the request unit the page is in the first <remain_threshold> postion of flash lru list
+	unsigned int lpn;
 };
 
 

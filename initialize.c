@@ -189,13 +189,13 @@ void initialize_lru(struct ssd_info *ssd) {
     ssd->dram->nvm_map->capacity = ssd->parameter->nvm_page_num;
     ssd->dram->nvm_map->count = 0;
     unsigned int page_num = ssd->parameter->page_block * ssd->parameter->block_plane * ssd->parameter->plane_die *
-                   ssd->parameter->die_chip * ssd->parameter->chip_num;
+                            ssd->parameter->die_chip * ssd->parameter->chip_num;
     ssd->dram->map->capacity = ssd->parameter->migrate_threshold;
     ssd->dram->map->count = 0;
-    ssd->dram->nvm_map->lru_head = (struct entry *)malloc(sizeof(struct entry));
-    ssd->dram->nvm_map->lru_tail = (struct entry *)malloc(sizeof(struct entry));
-    ssd->dram->map->lru_head = (struct entry *)malloc(sizeof(struct entry));
-    ssd->dram->map->lru_tail = (struct entry *)malloc(sizeof(struct entry));
+    ssd->dram->nvm_map->lru_head = (struct entry *) malloc(sizeof(struct entry));
+    ssd->dram->nvm_map->lru_tail = (struct entry *) malloc(sizeof(struct entry));
+    ssd->dram->map->lru_head = (struct entry *) malloc(sizeof(struct entry));
+    ssd->dram->map->lru_tail = (struct entry *) malloc(sizeof(struct entry));
     ssd->dram->map->lru_head->pre = NULL;
     ssd->dram->map->lru_head->post = ssd->dram->map->lru_tail;
     ssd->dram->map->lru_tail->pre = ssd->dram->map->lru_head;
@@ -221,17 +221,20 @@ struct dram_info *initialize_dram(struct ssd_info *ssd) {
     memset(dram->map, 0, sizeof(struct map_info));
     alloc_assert(dram->nvm_map, "dram->map");
     memset(dram->nvm_map, 0, sizeof(struct nvm_map_info));
-
     page_num = ssd->parameter->page_block * ssd->parameter->block_plane * ssd->parameter->plane_die *
                ssd->parameter->die_chip * ssd->parameter->chip_num;
-
     dram->map->map_entry = (struct entry *) malloc(sizeof(struct entry) * page_num); //每个物理页和逻辑页都有对应关系
     dram->nvm_map->map_entry = (struct entry *) malloc(sizeof(struct entry) * page_num); //每个物理页和逻辑页都有对应关系
     alloc_assert(dram->map->map_entry, "dram->map->map_entry");
     memset(dram->map->map_entry, 0, sizeof(struct entry) * page_num);
     alloc_assert(dram->nvm_map->map_entry, "dram->nvm_map->map_entry");
     memset(dram->nvm_map->map_entry, 0, sizeof(struct entry) * page_num);
-
+    unsigned int i;
+    //todo: nvm_map and flash map can use the same map, there is no need to split them for they won't mix
+    for (i = 0; i < page_num; i++) {
+        dram->map->map_entry[i].lpn = i;
+        dram->nvm_map->map_entry[i].lpn = i;
+    }
     dram->nvm_map->valid_page_num = ssd->parameter->nvm_page_num;
     initialize_lru(ssd);
     return dram;

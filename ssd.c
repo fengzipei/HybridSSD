@@ -20,6 +20,8 @@ Hao Luo         2011/01/01        2.0           Change               luohao13568
 
 #include "ssd.h"
 
+#define DEBUG_FAW
+
 /********************************************************************************************************************************
 1，main函数中initiatio()函数用来初始化ssd,；2，make_aged()函数使SSD成为aged，aged的ssd相当于使用过一段时间的ssd，里面有失效页，
 non_aged的ssd是新的ssd，无失效页，失效页的比例可以在初始化参数中设置；3，pre_process_page()函数提前扫一遍读请求，把读请求
@@ -594,10 +596,10 @@ void trace_output(struct ssd_info *ssd) {
             if (flag == 1) {
                 //if the request generate a sub_request to nvm, compute the time comsumed on it
                 if (req->nvm_start_time != req->nvm_end_time) {
-                    if(start_time < req->nvm_start_time){
+                    if (start_time < req->nvm_start_time) {
                         start_time = req->nvm_start_time;
                     }
-                    if(end_time < req->nvm_end_time){
+                    if (end_time < req->nvm_end_time) {
                         end_time = req->nvm_end_time;
                     }
                 }
@@ -719,6 +721,8 @@ void statistic_output(struct ssd_info *ssd) {
     fprintf(ssd->outputfile, "---------------------------statistic data---------------------------\n");
     fprintf(ssd->outputfile, "min lsn: %13d\n", ssd->min_lsn);
     fprintf(ssd->outputfile, "max lsn: %13d\n", ssd->max_lsn);
+    fprintf(ssd->outputfile, "migrate threshold: %13d\n", ssd->parameter->migrate_threshold);
+    fprintf(ssd->outputfile, "remain threshold: %13d\n", ssd->parameter->remain_threshold);
     fprintf(ssd->outputfile, "nvm read count: %13d\n", ssd->nvm_read_count);
     fprintf(ssd->outputfile, "nvm program count: %13d\n", ssd->nvm_write_count);
     fprintf(ssd->outputfile, "read count: %13d\n", ssd->read_count);
@@ -757,6 +761,8 @@ void statistic_output(struct ssd_info *ssd) {
     fprintf(ssd->statisticfile, "---------------------------statistic data---------------------------\n");
     fprintf(ssd->statisticfile, "min lsn: %13d\n", ssd->min_lsn);
     fprintf(ssd->statisticfile, "max lsn: %13d\n", ssd->max_lsn);
+    fprintf(ssd->outputfile, "migrate threshold: %13d\n", ssd->parameter->migrate_threshold);
+    fprintf(ssd->outputfile, "remain threshold: %13d\n", ssd->parameter->remain_threshold);
     fprintf(ssd->statisticfile, "nvm read count: %13d\n", ssd->nvm_read_count);
     fprintf(ssd->statisticfile, "nvm program count: %13d\n", ssd->nvm_write_count);
     fprintf(ssd->statisticfile, "read count: %13d\n", ssd->read_count);
@@ -990,42 +996,50 @@ void update_lru(struct ssd_info *ssd, int lpn, int type) {
             ssd->dram->nvm_map->lru_head->post->pre = &ssd->dram->nvm_map->map_entry[lpn];
             ssd->dram->nvm_map->lru_head->post = &ssd->dram->nvm_map->map_entry[lpn];
         } else {
-            ssd->dram->nvm_map->map_entry[lpn].pre->post = ssd->dram->nvm_map->map_entry[lpn].post;
-            ssd->dram->nvm_map->map_entry[lpn].post->pre = ssd->dram->nvm_map->map_entry[lpn].pre;
-            ssd->dram->nvm_map->map_entry[lpn].post = ssd->dram->nvm_map->lru_head->post;
-            ssd->dram->nvm_map->map_entry[lpn].pre = ssd->dram->nvm_map->lru_head;
-            ssd->dram->nvm_map->lru_head->post->pre = &ssd->dram->nvm_map->map_entry[lpn];
-            ssd->dram->nvm_map->lru_head->post = &ssd->dram->nvm_map->map_entry[lpn];
+            //if this node is already in the head of lru list, nothing to do;
+            if (ssd->dram->nvm_map->lru_head != &ssd->dram->nvm_map->map_entry[lpn]) {
+                ssd->dram->nvm_map->map_entry[lpn].pre->post = ssd->dram->nvm_map->map_entry[lpn].post;
+                ssd->dram->nvm_map->map_entry[lpn].post->pre = ssd->dram->nvm_map->map_entry[lpn].pre;
+                ssd->dram->nvm_map->map_entry[lpn].post = ssd->dram->nvm_map->lru_head->post;
+                ssd->dram->nvm_map->map_entry[lpn].pre = ssd->dram->nvm_map->lru_head;
+                ssd->dram->nvm_map->lru_head->post->pre = &ssd->dram->nvm_map->map_entry[lpn];
+                ssd->dram->nvm_map->lru_head->post = &ssd->dram->nvm_map->map_entry[lpn];
+            }
         }
     } else {
         //note that the lru list of flash only hold migrate_threshsold nodes
         //move the node to the head of lru list
-        if (ssd->dram->map->map_entry[lpn].pre == NULL) {
+        if (ssd->dram->map->map_entry[lpn].pre == NULL) { //the node is not in lru list
             ssd->dram->map->map_entry[lpn].post = ssd->dram->map->lru_head->post;
             ssd->dram->map->map_entry[lpn].pre = ssd->dram->map->lru_head;
             ssd->dram->map->lru_head->post->pre = &ssd->dram->map->map_entry[lpn];
             ssd->dram->map->lru_head->post = &ssd->dram->map->map_entry[lpn];
+            ssd->dram->map->count++;
         } else {
-            ssd->dram->map->map_entry[lpn].pre->post = ssd->dram->map->map_entry[lpn].post;
-            ssd->dram->map->map_entry[lpn].post->pre = ssd->dram->map->map_entry[lpn].pre;
-            ssd->dram->map->map_entry[lpn].post = ssd->dram->map->lru_head->post;
-            ssd->dram->map->map_entry[lpn].pre = ssd->dram->map->lru_head;
-            ssd->dram->map->lru_head->post->pre = &ssd->dram->map->map_entry[lpn];
-            ssd->dram->map->lru_head->post = &ssd->dram->map->map_entry[lpn];
+            if (ssd->dram->map->lru_head != &ssd->dram->map->map_entry[lpn]) {
+                ssd->dram->map->map_entry[lpn].pre->post = ssd->dram->map->map_entry[lpn].post;
+                ssd->dram->map->map_entry[lpn].post->pre = ssd->dram->map->map_entry[lpn].pre;
+                ssd->dram->map->map_entry[lpn].post = ssd->dram->map->lru_head->post;
+                ssd->dram->map->map_entry[lpn].pre = ssd->dram->map->lru_head;
+                ssd->dram->map->lru_head->post->pre = &ssd->dram->map->map_entry[lpn];
+                ssd->dram->map->lru_head->post = &ssd->dram->map->map_entry[lpn];
+            }
         }
         //remove tail node from lru list
-        if(ssd->dram->map->count > ssd->dram->map->capacity){
-            struct entry *tmp = ssd->dram->map->lru_tail;
+        if (ssd->dram->map->count > ssd->dram->map->capacity) {
+            struct entry *tmp = ssd->dram->map->lru_tail->pre;
             ssd->dram->map->lru_tail->pre->pre->post = ssd->dram->map->lru_tail;
             ssd->dram->map->lru_tail->pre = tmp->pre;
             tmp->pre = NULL;
             tmp->post = NULL;
             tmp->remain_count = 0;
+            ssd->dram->map->count--;
         }
         //update the remain of the nodes in lru list
         struct entry *tmp = ssd->dram->map->lru_head->post;
-        while(tmp != ssd->dram->map->lru_tail){
+        while (tmp != ssd->dram->map->lru_tail) {
             tmp->remain_count++;
+            tmp = tmp->post;
         }
     }
 }
@@ -1080,6 +1094,50 @@ struct ssd_info *no_buffer_distribute(struct ssd_info *ssd) {
                 sub = creat_sub_request(ssd, lpn, sub_size, sub_state, req, req->operation);
                 update_lru(ssd, lpn, 0);
                 //todo: migrate from flash to nvm
+                //check if there are pages that can be migrate from flash to nvm
+                struct entry *tmp = ssd->dram->map->lru_head->post;
+                while (tmp != ssd->dram->map->lru_tail) {
+                    if(tmp->remain_count >= ssd->parameter->remain_threshold) {
+                        //create a read request to flash & migrate the mapping info
+                        creat_sub_request(ssd, tmp->lpn, size(0x7fffffff), 0x7fffffff, req, READ);
+                        //if nvm is full, create a write request to flash
+                        if (ssd->dram->nvm_map->valid_page_num == 0) {
+                            creat_sub_request(ssd, ssd->dram->nvm_map->lru_tail->pre->lpn, size(0x7fffffff), 0x7fffffff,
+                                              req, WRITE);
+                            //mark the removed page in nvm as invalid
+                            ssd->dram->nvm_map->map_entry[ssd->dram->nvm_map->lru_tail->pre->lpn].state = 0;
+                            ssd->dram->nvm_map->valid_page_num++;
+                            //here I need to update the lru list of nvm
+                            ssd->dram->nvm_map->lru_tail->pre->pre->post = ssd->dram->nvm_map->lru_tail;
+                            ssd->dram->nvm_map->lru_tail->pre->pre = NULL;
+                            ssd->dram->nvm_map->lru_tail->pre->post = NULL;
+                            ssd->dram->nvm_map->lru_tail->pre = ssd->dram->nvm_map->lru_tail->pre->pre;
+                        }
+                        //note that the lru list is based on lpn, meaning that erase & move page in flash won't
+                        //impact the lru list
+                        //the lru list of flash will only be changed when:
+                        //  1. append write to flash (cover the condition that migrate from nvm to flash)
+                        //  2. update write to flash
+                        //  3. migrate from flash to nvm
+                        //mark the page in flash as invalid and the page in nvm as valid
+                        unsigned int ppn = ssd->dram->map->map_entry[lpn].pn;
+                        struct local *location = find_location(ssd, ppn);
+                        ssd->channel_head[location->channel].chip_head[location->chip].die_head[location->die].plane_head[location->plane].blk_head[location->block].page_head[location->page].free_state = 0;
+                        ssd->channel_head[location->channel].chip_head[location->chip].die_head[location->die].plane_head[location->plane].blk_head[location->block].page_head[location->page].lpn = 0;
+                        ssd->channel_head[location->channel].chip_head[location->chip].die_head[location->die].plane_head[location->plane].blk_head[location->block].page_head[location->page].valid_state = 0;
+                        ssd->channel_head[location->channel].chip_head[location->chip].die_head[location->die].plane_head[location->plane].blk_head[location->block].invalid_page_num++;
+                        ssd->dram->map->map_entry[lpn].pn = 0;
+                        //here I need to remove this node from lru list of flash
+                        ssd->dram->map->map_entry[lpn].pre->post = ssd->dram->map->map_entry[lpn].post;
+                        ssd->dram->map->map_entry[lpn].post->pre = ssd->dram->map->map_entry[lpn].pre;
+                        ssd->dram->map->map_entry[lpn].pre = NULL;
+                        ssd->dram->map->map_entry[lpn].post = NULL;
+                        ssd->dram->nvm_map->map_entry[lpn].state = 0x7fffffff;
+                        ssd->dram->nvm_map->valid_page_num--;
+                        update_lru(ssd, lpn, 1);
+                    }
+                    tmp = tmp->post;
+                }
             }
             lpn++;
         }
@@ -1107,8 +1165,7 @@ struct ssd_info *no_buffer_distribute(struct ssd_info *ssd) {
                 ssd->nvm_write_count++;
                 ssd->dram->nvm_map->map_entry[lpn].state |= state;
                 //if the page is already the head node in lru list, can't update lru
-                if(ssd->dram->nvm_map->map_entry[lpn].pre == ssd->dram->nvm_map->lru_head){
-                    ;
+                if (ssd->dram->nvm_map->map_entry[lpn].pre == ssd->dram->nvm_map->lru_head) { ;
                 } else {
                     update_lru(ssd, lpn, 1);
                 }
@@ -1122,8 +1179,7 @@ struct ssd_info *no_buffer_distribute(struct ssd_info *ssd) {
 #endif
                 sub = creat_sub_request(ssd, lpn, sub_size, state, req, req->operation);
                 //if the page is already the head node in lru list, can't update lru
-                if(ssd->dram->map->map_entry[lpn].pre == ssd->dram->map->lru_head){
-                    ;
+                if (ssd->dram->map->map_entry[lpn].pre == ssd->dram->map->lru_head) { ;
                 } else {
                     update_lru(ssd, lpn, 1);
                     //todo: migrate from flash to nvm
@@ -1146,10 +1202,13 @@ struct ssd_info *no_buffer_distribute(struct ssd_info *ssd) {
 #ifdef DEBUG
                     printf("enter flash append write\n");
 #endif
-                    sub = creat_sub_request(ssd, lpn, sub_size, state, req, req->operation);
+                    creat_sub_request(ssd, lpn, sub_size, state, req, req->operation);
+#ifdef DEBUG_FAW
+                    printf("leave flash append write\n");
+#endif
                     update_lru(ssd, lpn, 0);
                     //todo: migrater from flash to nvm
-                    
+
                 }
             }
             lpn++;
