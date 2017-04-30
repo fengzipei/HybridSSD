@@ -24,7 +24,7 @@ Hao Luo         2011/01/01        2.0           Change               luohao13568
 #include "flash.h"
 #include "pagemap.h"
 
-#define DEBUG 1
+//#define DEBUG 1
 
 #define MAX_INT64  0x7fffffffffffffffll
 
@@ -53,3 +53,5 @@ void free_all_node(struct ssd_info *);
 struct ssd_info *make_aged(struct ssd_info *);
 
 struct ssd_info *no_buffer_distribute(struct ssd_info *);
+
+struct ssd_info *origin_no_buffer_distribute(struct ssd_info *);

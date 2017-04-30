@@ -22,7 +22,9 @@ Hao Luo         2011/01/01        2.0           Change               luohao13568
 #include "flash.h"
 #include "ssd.h"
 
-#define DEBUG_GET_PPN
+//#define DEBUG_GET_PPN
+
+#undef DEBUG
 
 
 /************************************************
@@ -235,6 +237,7 @@ struct ssd_info *pre_process_page(struct ssd_info *ssd) {
                     if (size <= 8 && ssd->dram->nvm_map->valid_page_num > 0) {
 #ifdef DEBUG
                         printf("enter nvm pre process write, lpn = %d\n", lpn);
+                        getchar();
 #endif
                         //here we simpily put these page in nvm sequentily
                         //todo: program & read count is needed to add later
@@ -475,7 +478,8 @@ get_ppn(struct ssd_info *ssd, unsigned int channel, unsigned int chip, unsigned 
         0)                                       /*this is the first logical page*/
     {
         if (ssd->dram->map->map_entry[lpn].pn != 0) {
-            printf("Error in get_ppn()\n");
+            printf("->Error in get_ppn()\n");
+            getchar();
         }
         ssd->dram->map->map_entry[lpn].pn = find_ppn(ssd, channel, chip, die, plane, block, page);
         ssd->dram->map->map_entry[lpn].state = sub->state;

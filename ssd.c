@@ -20,7 +20,7 @@ Hao Luo         2011/01/01        2.0           Change               luohao13568
 
 #include "ssd.h"
 
-#define DEBUG_FAW
+//#define DEBUG_FAW
 
 /********************************************************************************************************************************
 1，main函数中initiatio()函数用来初始化ssd,；2，make_aged()函数使SSD成为aged，aged的ssd相当于使用过一段时间的ssd，里面有失效页，
@@ -111,6 +111,7 @@ struct ssd_info *simulate(struct ssd_info *ssd) {
             } else {
                 //todo: handle every request
                 no_buffer_distribute(ssd);
+                //origin_no_buffer_distribute(ssd);
             }
         }
         process(ssd);
@@ -198,7 +199,7 @@ int get_requests(struct ssd_info *ssd) {
                 ssd->current_time = nearest_event_time;
             return -1;
         } else {
-            if (ssd->request_queue_length >= ssd->parameter->queue_length) {
+            if (ssd->request_queue_length > ssd->parameter->queue_length) {
                 fseek(ssd->tracefile, filepoint, 0);
                 ssd->current_time = nearest_event_time;
                 return -1;
@@ -989,6 +990,7 @@ struct ssd_info *make_aged(struct ssd_info *ssd) {
 
 //here type means update the lru list of nvm or flash, type == 1? nvm : flash
 void update_lru(struct ssd_info *ssd, int lpn, int type) {
+    return;
     if (type == 1) {
         //move the node to the head of lru list
         if (ssd->dram->nvm_map->map_entry[lpn].pre == NULL) {
@@ -1048,6 +1050,7 @@ void update_lru(struct ssd_info *ssd, int lpn, int type) {
 //migrate from flash to nvm
 //return 1 if this page is migrated, otherwise return 0
 int migrate(struct ssd_info *ssd, struct request *req, int lpn) {
+    return 0;
     int flag = 0; //indicate if the page is migrated
     //check if there are pages that can be migrate from flash to nvm
     struct entry *tmp = ssd->dram->map->lru_head->post;
@@ -1102,6 +1105,57 @@ int migrate(struct ssd_info *ssd, struct request *req, int lpn) {
     return flag;
 }
 
+struct ssd_info *origin_no_buffer_distribute(struct ssd_info *ssd) {
+    unsigned int lsn, lpn, last_lpn, first_lpn, complete_flag = 0, state;
+    unsigned int flag = 0, flag1 = 1, active_region_flag = 0;           //to indicate the lsn is hitted or not
+    struct request *req = NULL;
+    struct sub_request *sub = NULL, *sub_r = NULL, *update = NULL;
+    struct local *loc = NULL;
+    struct channel_info *p_ch = NULL;
+
+
+    unsigned int mask = 0;
+    unsigned int offset1 = 0, offset2 = 0;
+    unsigned int sub_size = 0;
+    unsigned int sub_state = 0;
+
+    ssd->dram->current_time = ssd->current_time;
+    req = ssd->request_tail;
+    lsn = req->lsn;
+    lpn = req->lsn / ssd->parameter->subpage_page;
+    last_lpn = (req->lsn + req->size - 1) / ssd->parameter->subpage_page;
+    first_lpn = req->lsn / ssd->parameter->subpage_page;
+
+    if (req->operation == READ) {
+        while (lpn <= last_lpn) {
+            sub_state = (ssd->dram->map->map_entry[lpn].state & 0x7fffffff);
+            sub_size = size(sub_state);
+            sub = creat_sub_request(ssd, lpn, sub_size, sub_state, req, req->operation);
+            lpn++;
+        }
+    } else if (req->operation == WRITE) {
+        while (lpn <= last_lpn) {
+            mask = ~(0xffffffff << (ssd->parameter->subpage_page));
+            state = mask;
+            if (lpn == first_lpn) {
+                offset1 = ssd->parameter->subpage_page - ((lpn + 1) * ssd->parameter->subpage_page - req->lsn);
+                state = state & (0xffffffff << offset1);
+            }
+            if (lpn == last_lpn) {
+                offset2 = ssd->parameter->subpage_page -
+                          ((lpn + 1) * ssd->parameter->subpage_page - (req->lsn + req->size));
+                state = state & (~(0xffffffff << offset2));
+            }
+            sub_size = size(state);
+
+            sub = creat_sub_request(ssd, lpn, sub_size, state, req, req->operation);
+            lpn++;
+        }
+    }
+
+    return ssd;
+}
+
 
 /*********************************************************************************************
 *no_buffer_distribute()函数是处理当ssd没有dram的时候，
@@ -1131,6 +1185,8 @@ struct ssd_info *no_buffer_distribute(struct ssd_info *ssd) {
         while (lpn <= last_lpn) {
             sub_state = (ssd->dram->map->map_entry[lpn].state & 0x7fffffff);
             sub_size = size(sub_state);
+
+
             //filter read request
             //todo: more judge to confirm the page is in nvm, update lru list
             if (ssd->dram->nvm_map->map_entry[lpn].state != 0) {
@@ -1153,7 +1209,7 @@ struct ssd_info *no_buffer_distribute(struct ssd_info *ssd) {
                 //here we can avoid read from flash if the page will be migrate from flash to nvm
                 //todo: migrate from flash to nvm (done)
                 if (migrate(ssd, req, lpn) == 0) {
-                    creat_sub_request(ssd, lpn, sub_size, sub_state, req, req->operation);
+                    creat_sub_request(ssd, lpn, sub_size, state, req, req->operation);
                 } else {
                     //this page is in nvm now
                     if (req->nvm_start_time <= ssd->current_time) {
@@ -1197,9 +1253,9 @@ struct ssd_info *no_buffer_distribute(struct ssd_info *ssd) {
 #ifdef DEBUG
                 printf("enter flash update write\n");
 #endif
-                update_lru(ssd, lpn, 1);
+                update_lru(ssd, lpn, 0);
                 if (migrate(ssd, req, lpn) == 0) {
-                    creat_sub_request(ssd, lpn, sub_size, sub_state, req, req->operation);
+                    creat_sub_request(ssd, lpn, sub_size, state, req, req->operation);
                 } else {
                     //this page is in nvm now
                     if (req->nvm_start_time <= ssd->current_time) {
@@ -1226,9 +1282,9 @@ struct ssd_info *no_buffer_distribute(struct ssd_info *ssd) {
 #ifdef DEBUG
                     printf("enter flash append write\n");
 #endif
-                    update_lru(ssd, lpn, 1);
+                    update_lru(ssd, lpn, 0);
                     if (migrate(ssd, req, lpn) == 0) {
-                        creat_sub_request(ssd, lpn, sub_size, sub_state, req, req->operation);
+                        creat_sub_request(ssd, lpn, sub_size, state, req, req->operation);
                     } else {
                         //this page is in nvm now
                         if (req->nvm_start_time <= ssd->current_time) {
