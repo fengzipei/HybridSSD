@@ -18,13 +18,14 @@ Hao Luo         2011/01/01        2.0           Change               luohao13568
 
 #define _CRTDBG_MAP_ALLOC
 
+#include <unistd.h>
 #include "pagemap.h"
 #include "flash.h"
 #include "ssd.h"
 
 //#define DEBUG_GET_PPN
 
-#undef DEBUG
+//#define DEBUG
 
 
 /************************************************
@@ -195,8 +196,11 @@ struct ssd_info *pre_process_page(struct ssd_info *ssd) {
                                    ssd->parameter->block_plane * ssd->parameter->page_block *
                                    ssd->parameter->subpage_page) * (1 - ssd->parameter->overprovide));
     unsigned int position_in_nvm = 0;
+    int size_splitter[10]; // [0, 8] | (8, 16] | (16, 24] | (24, inf)
+    memset(size_splitter, 0, 10 * sizeof(int));
     while (fgets(buffer_request, 200, ssd->tracefile)) {
         sscanf(buffer_request, "%lld %d %d %d %d", &time, &device, &lsn, &size, &ope);
+        size_splitter[(((size % 32) - 1) / 8)]++;
         fl++;
         trace_assert(time, device, lsn, size, ope);                         /*断言，当读到的time，device，lsn，size，ope不合法时就会处理*/
 
@@ -294,10 +298,12 @@ struct ssd_info *pre_process_page(struct ssd_info *ssd) {
             }//while(add_size<size)
         }//if(ope==1)
     }
-
+    for(i = 0; i < 10; i++) {
+        printf("%d | \n", size_splitter[i]);
+    }
     printf("\n");
     printf("pre_process is complete!\n");
-
+    pause();
     fclose(ssd->tracefile);
 
     for (i = 0; i < ssd->parameter->channel_number; i++)

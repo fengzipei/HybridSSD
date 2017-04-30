@@ -55,6 +55,8 @@ avlTree.h
 /cygdrive/c/Users/lab/CLionProjects/HybridSSD/avlTree.h
 
 /cygdrive/c/Users/lab/CLionProjects/HybridSSD/pagemap.c
+unistd.h
+-
 pagemap.h
 /cygdrive/c/Users/lab/CLionProjects/HybridSSD/pagemap.h
 flash.h
