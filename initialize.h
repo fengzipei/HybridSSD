@@ -172,7 +172,7 @@ struct ssd_info {
     unsigned int read_request_count;     //记录读操作的次数
     int64_t write_avg;                   //记录用于计算写请求平均响应时间的时间
     int64_t read_avg;                    //记录用于计算读请求平均响应时间的时间
-
+    int migrate_count;
     unsigned int nvm_write_count;
     unsigned int nvm_read_count;
     unsigned int min_lsn;

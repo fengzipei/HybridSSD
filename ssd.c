@@ -721,6 +721,7 @@ void statistic_output(struct ssd_info *ssd) {
     fprintf(ssd->outputfile, "---------------------------statistic data---------------------------\n");
     fprintf(ssd->outputfile, "min lsn: %13d\n", ssd->min_lsn);
     fprintf(ssd->outputfile, "max lsn: %13d\n", ssd->max_lsn);
+    fprintf(ssd->outputfile, "migrate count: %13d\n", ssd->migrate_count);
     fprintf(ssd->outputfile, "migrate threshold: %13d\n", ssd->parameter->migrate_threshold);
     fprintf(ssd->outputfile, "remain threshold: %13d\n", ssd->parameter->remain_threshold);
     fprintf(ssd->outputfile, "nvm read count: %13d\n", ssd->nvm_read_count);
@@ -1045,11 +1046,17 @@ void update_lru(struct ssd_info *ssd, int lpn, int type) {
 }
 
 //migrate from flash to nvm
-void migrate(struct ssd_info *ssd, struct request *req, int lpn) {
+//return 1 if this page is migrated, otherwise return 0
+int migrate(struct ssd_info *ssd, struct request *req, int lpn) {
+    int flag = 0; //indicate if the page is migrated
     //check if there are pages that can be migrate from flash to nvm
     struct entry *tmp = ssd->dram->map->lru_head->post;
     while (tmp != ssd->dram->map->lru_tail) {
         if (tmp->remain_count >= ssd->parameter->remain_threshold) {
+            if (tmp->lpn == lpn) {
+                flag = 1;
+            }
+            ssd->migrate_count++;
             //create a read request to flash & migrate the mapping info
             creat_sub_request(ssd, tmp->lpn, size(0x7fffffff), 0x7fffffff, req, READ);
             //if nvm is full, create a write request to flash
@@ -1064,6 +1071,7 @@ void migrate(struct ssd_info *ssd, struct request *req, int lpn) {
                 ssd->dram->nvm_map->lru_tail->pre->pre = NULL;
                 ssd->dram->nvm_map->lru_tail->pre->post = NULL;
                 ssd->dram->nvm_map->lru_tail->pre = ssd->dram->nvm_map->lru_tail->pre->pre;
+                ssd->nvm_read_count++;
             }
             //note that the lru list is based on lpn, meaning that erase & move page in flash won't
             //impact the lru list
@@ -1086,10 +1094,12 @@ void migrate(struct ssd_info *ssd, struct request *req, int lpn) {
             ssd->dram->map->map_entry[lpn].post = NULL;
             ssd->dram->nvm_map->map_entry[lpn].state = 0x7fffffff;
             ssd->dram->nvm_map->valid_page_num--;
+            ssd->nvm_write_count++;
             update_lru(ssd, lpn, 1);
         }
         tmp = tmp->post;
     }
+    return flag;
 }
 
 
@@ -1140,9 +1150,18 @@ struct ssd_info *no_buffer_distribute(struct ssd_info *ssd) {
                 printf("enter flash read\n");
 #endif
                 update_lru(ssd, lpn, 0);
-                creat_sub_request(ssd, lpn, sub_size, sub_state, req, req->operation);
+                //here we can avoid read from flash if the page will be migrate from flash to nvm
                 //todo: migrate from flash to nvm (done)
-                migrate(ssd, req, lpn);
+                if (migrate(ssd, req, lpn) == 0) {
+                    creat_sub_request(ssd, lpn, sub_size, sub_state, req, req->operation);
+                } else {
+                    //this page is in nvm now
+                    if (req->nvm_start_time <= ssd->current_time) {
+                        req->nvm_start_time = ssd->current_time;
+                    }
+                    ssd->nvm_read_count++;
+                    req->nvm_end_time = ssd->current_time + 100;
+                }
             }
             lpn++;
         }
@@ -1169,11 +1188,7 @@ struct ssd_info *no_buffer_distribute(struct ssd_info *ssd) {
 #endif
                 ssd->nvm_write_count++;
                 ssd->dram->nvm_map->map_entry[lpn].state |= state;
-                //if the page is already the head node in lru list, can't update lru
-                if (ssd->dram->nvm_map->map_entry[lpn].pre == ssd->dram->nvm_map->lru_head) { ;
-                } else {
-                    update_lru(ssd, lpn, 1);
-                }
+                update_lru(ssd, lpn, 1);
                 if (req->nvm_start_time <= ssd->current_time) {
                     req->nvm_start_time = ssd->current_time;
                 }
@@ -1182,16 +1197,19 @@ struct ssd_info *no_buffer_distribute(struct ssd_info *ssd) {
 #ifdef DEBUG
                 printf("enter flash update write\n");
 #endif
-                sub = creat_sub_request(ssd, lpn, sub_size, state, req, req->operation);
-                //if the page is already the head node in lru list, can't update lru
-                if (ssd->dram->map->map_entry[lpn].pre == ssd->dram->map->lru_head) { ;
+                update_lru(ssd, lpn, 1);
+                if (migrate(ssd, req, lpn) == 0) {
+                    creat_sub_request(ssd, lpn, sub_size, sub_state, req, req->operation);
                 } else {
-                    update_lru(ssd, lpn, 1);
-                    //todo: migrate from flash to nvm
-                    migrate(ssd, req, lpn);
+                    //this page is in nvm now
+                    if (req->nvm_start_time <= ssd->current_time) {
+                        req->nvm_start_time = ssd->current_time;
+                    }
+                    ssd->nvm_write_count++;
+                    req->nvm_end_time = ssd->current_time + 300;
                 }
             } else { //append write
-                if (ssd->dram->nvm_map->valid_page_num > 0 && req->size < 8) {
+                if (ssd->dram->nvm_map->valid_page_num > 0 && req->size < 8) { //append write to nvm
 #ifdef DEBUG
                     printf("enter nvm append write\n");
 #endif
@@ -1204,17 +1222,24 @@ struct ssd_info *no_buffer_distribute(struct ssd_info *ssd) {
                     ssd->nvm_write_count++;
                     req->nvm_end_time = ssd->current_time + 300;
                     ssd->dram->nvm_map->valid_page_num--;
-                } else {
+                } else {    //append write to flash
 #ifdef DEBUG
                     printf("enter flash append write\n");
 #endif
-                    creat_sub_request(ssd, lpn, sub_size, state, req, req->operation);
+                    update_lru(ssd, lpn, 1);
+                    if (migrate(ssd, req, lpn) == 0) {
+                        creat_sub_request(ssd, lpn, sub_size, sub_state, req, req->operation);
+                    } else {
+                        //this page is in nvm now
+                        if (req->nvm_start_time <= ssd->current_time) {
+                            req->nvm_start_time = ssd->current_time;
+                        }
+                        ssd->nvm_write_count++;
+                        req->nvm_end_time = ssd->current_time + 300;
+                    }
 #ifdef DEBUG_FAW
                     printf("leave flash append write\n");
 #endif
-                    update_lru(ssd, lpn, 0);
-                    //todo: migrate from flash to nvm
-                    migrate(ssd, req, lpn);
                 }
             }
             lpn++;
