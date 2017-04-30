@@ -1,26 +1,24 @@
 #include "avlTree.h"
 
 
-
-/******************************************************************** 
+/********************************************************************
 * 
 * avlTreeHigh(TREE_NODE *pNode)
 * 
-* ¼ÆËãµ±Ç°Ê÷µÄ¸ß¶È
+* è®¡ç®—å½“å‰æ ‘çš„é«˜åº¦
 *  
-* Returns         : Ê÷µÄ¸ß¶È
+* Returns         : æ ‘çš„é«˜åº¦
 * 
-*********************************************************************/ 
-int avlTreeHigh(TREE_NODE *pNode)
-{
-	int lh=0,rh=0;
-	if(!pNode)
-		return 0;
+*********************************************************************/
+int avlTreeHigh(TREE_NODE *pNode) {
+    int lh = 0, rh = 0;
+    if (!pNode)
+        return 0;
 
-	lh = avlTreeHigh(pNode->left_child);
-	rh = avlTreeHigh(pNode->right_child);
+    lh = avlTreeHigh(pNode->left_child);
+    rh = avlTreeHigh(pNode->right_child);
 
-	return (1+((lh>rh)?lh:rh));
+    return (1 + ((lh > rh) ? lh : rh));
 }
 
 
@@ -28,68 +26,66 @@ int avlTreeHigh(TREE_NODE *pNode)
 * 
 * avlTreeCheck(tAVLTree *pTree , TREE_NODE *pNode)
 * 
-* ¼ìÑéµ±Ç°µÄÓÐÐòÆ½ºâ¶þ²æÊ÷ÊÇ·ñÆ½ºâ
-* ÊÇ·ñÊÇÓÐÐòµÄ£¬²¢ÇÒ¸÷½ÚµãµÄÖ¸ÕëÃ»ÓÐ
-* ´íÎó
+* æ£€éªŒå½“å‰çš„æœ‰åºå¹³è¡¡äºŒå‰æ ‘æ˜¯å¦å¹³è¡¡
+* æ˜¯å¦æ˜¯æœ‰åºçš„ï¼Œå¹¶ä¸”å„èŠ‚ç‚¹çš„æŒ‡é’ˆæ²¡æœ‰
+* é”™è¯¯
 * 
 * Returns         : 
-* 			  1 : ±íÊ¾ÊÇÒ»¿ÃÍê±¸µÄÓÐÐòÆ½ºâ¶þ²æÊ÷	
-*			  0 : ±íÊ¾ÊÇÒ»¿Ã ²»½¡¿µµÄ¶þ²æÊ÷
-*                             ²»½¡¿µ¿ÉÄÜÊÇ²»Æ½ºâ£¬¿ÉÄÜÊÇÆ½ºâÒò×Ó
-*                             ÓÐ´íÎó£¬Ò²¿ÉÄÜÊÇÖ¸Õë²»Æ¥Åä
-*********************************************************************/ 
-int avlTreeCheck(tAVLTree *pTree , TREE_NODE *pNode)
-{
-	int lh=0,rh=0;
-	TREE_NODE *tree_root = AVL_NULL;
+* 			  1 : è¡¨ç¤ºæ˜¯ä¸€æ£µå®Œå¤‡çš„æœ‰åºå¹³è¡¡äºŒå‰æ ‘	
+*			  0 : è¡¨ç¤ºæ˜¯ä¸€æ£µ ä¸å¥åº·çš„äºŒå‰æ ‘
+*                             ä¸å¥åº·å¯èƒ½æ˜¯ä¸å¹³è¡¡ï¼Œå¯èƒ½æ˜¯å¹³è¡¡å› å­
+*                             æœ‰é”™è¯¯ï¼Œä¹Ÿå¯èƒ½æ˜¯æŒ‡é’ˆä¸åŒ¹é…
+*********************************************************************/
+int avlTreeCheck(tAVLTree *pTree, TREE_NODE *pNode) {
+    int lh = 0, rh = 0;
+    TREE_NODE *tree_root = AVL_NULL;
 
-	if(!pTree || !pNode)
-		return 0;
+    if (!pTree || !pNode)
+        return 0;
 
-	lh = avlTreeHigh(pNode->left_child);
-	rh = avlTreeHigh(pNode->right_child);
-	if(pNode->bf != lh-rh)   /*Æ½ºâÒò×ÓÊÇÕýÈ·µÄ*/
-		return 0;
+    lh = avlTreeHigh(pNode->left_child);
+    rh = avlTreeHigh(pNode->right_child);
+    if (pNode->bf != lh - rh)   /*å¹³è¡¡å› å­æ˜¯æ­£ç¡®çš„*/
+        return 0;
 
-	/*´æÔÚ×ó×ÓÊ÷£¬µ«ÊÇ×ó×ÓÊ÷Òª´óÓÚ×Ô¼º*/
-	if(pNode->left_child && ((*pTree->keyCompare)(pNode , pNode->left_child))>=0)
-		return 0;
+    /*å­˜åœ¨å·¦å­æ ‘ï¼Œä½†æ˜¯å·¦å­æ ‘è¦å¤§äºŽè‡ªå·±*/
+    if (pNode->left_child && ((*pTree->keyCompare)(pNode, pNode->left_child)) >= 0)
+        return 0;
 
-	/*´æÔÚÓÒ×ÓÊ÷£¬µ«ÊÇÓÒ×ÓÊ÷Òª´óÓÚ×Ô¼º*/
-	if(pNode->right_child && ((*pTree->keyCompare)(pNode , pNode->right_child))<=0)
-		return 0;
+    /*å­˜åœ¨å³å­æ ‘ï¼Œä½†æ˜¯å³å­æ ‘è¦å¤§äºŽè‡ªå·±*/
+    if (pNode->right_child && ((*pTree->keyCompare)(pNode, pNode->right_child)) <= 0)
+        return 0;
 
-	/*Èç¹û±¾½ÚµãµÄ¸¸Ç×½ÚµãÎª¿Õ£¬µ«ÊÇÊ÷¸ù²»ÊÇ×Ô¼º*/
-	tree_root = pNode->tree_root;
-	if(!tree_root && (pTree->pTreeHeader != pNode))
-		return 0;
+    /*å¦‚æžœæœ¬èŠ‚ç‚¹çš„çˆ¶äº²èŠ‚ç‚¹ä¸ºç©ºï¼Œä½†æ˜¯æ ‘æ ¹ä¸æ˜¯è‡ªå·±*/
+    tree_root = pNode->tree_root;
+    if (!tree_root && (pTree->pTreeHeader != pNode))
+        return 0;
 
-	if(tree_root)
-	{
-		/******************************
-		*¸¸Ç×½ÚµãµÄ×óÓÒ×ÓÊ÷¶¼²»ÊÇ×Ô¼º»ò
-		*¸¸Ç×½ÚµãµÄ×óÓÒ×ÓÊ÷¶¼ÊÇ×Ô¼º
-		*******************************/
-		if((tree_root->left_child != pNode && tree_root->right_child != pNode) ||
-			(tree_root->left_child == pNode && tree_root->right_child == pNode))
-			return 0;
-	}
+    if (tree_root) {
+        /******************************
+        *çˆ¶äº²èŠ‚ç‚¹çš„å·¦å³å­æ ‘éƒ½ä¸æ˜¯è‡ªå·±æˆ–
+        *çˆ¶äº²èŠ‚ç‚¹çš„å·¦å³å­æ ‘éƒ½æ˜¯è‡ªå·±
+        *******************************/
+        if ((tree_root->left_child != pNode && tree_root->right_child != pNode) ||
+            (tree_root->left_child == pNode && tree_root->right_child == pNode))
+            return 0;
+    }
 
-	/****************************
-	*×ó×ÓÊ÷µÄ¸¸Ç×½Úµã²»ÊÇ×Ô¼º»òÕß
-	*ÓÒ×ÓÊ÷µÄ¸¸Ç×½Úµã²»ÊÇ×Ô¼º
-	*****************************/
-	if((pNode->left_child && pNode->left_child->tree_root != pNode) ||
-		(pNode->right_child && pNode->right_child->tree_root != pNode))
-		return 0;
+    /****************************
+    *å·¦å­æ ‘çš„çˆ¶äº²èŠ‚ç‚¹ä¸æ˜¯è‡ªå·±æˆ–è€…
+    *å³å­æ ‘çš„çˆ¶äº²èŠ‚ç‚¹ä¸æ˜¯è‡ªå·±
+    *****************************/
+    if ((pNode->left_child && pNode->left_child->tree_root != pNode) ||
+        (pNode->right_child && pNode->right_child->tree_root != pNode))
+        return 0;
 
-	if(pNode->left_child && !avlTreeCheck(pTree, pNode->left_child))
-		return 0;
+    if (pNode->left_child && !avlTreeCheck(pTree, pNode->left_child))
+        return 0;
 
-	if(pNode->right_child && !avlTreeCheck(pTree, pNode->right_child))
-		return 0;
+    if (pNode->right_child && !avlTreeCheck(pTree, pNode->right_child))
+        return 0;
 
-	return 1;
+    return 1;
 }
 
 
@@ -97,11 +93,11 @@ int avlTreeCheck(tAVLTree *pTree , TREE_NODE *pNode)
 * 
 * R_Rotate(TREE_NODE **ppNode)
 * 
-* ¶þ²æÊ÷ÒÔ*ppNodeÎª¸ù½Úµã£¬½øÐÐÓÒÐý×ª²Ù×÷
+* äºŒå‰æ ‘ä»¥*ppNodeä¸ºæ ¹èŠ‚ç‚¹ï¼Œè¿›è¡Œå³æ—‹è½¬æ“ä½œ
 * 
-* Returns         :  ÎÞ
+* Returns         :  æ— 
 *
-*           ×ÖÄ¸ºóÃæµÄÊý×Ö±íÊ¾ÊÇÆ½ºâÒò×Ó
+*           å­—æ¯åŽé¢çš„æ•°å­—è¡¨ç¤ºæ˜¯å¹³è¡¡å› å­
 *
 *             E2                C0  
 *            / \               / \                    
@@ -114,19 +110,18 @@ int avlTreeCheck(tAVLTree *pTree , TREE_NODE *pNode)
 
 *                                              
 **********************************************************************/
-static void R_Rotate(TREE_NODE **ppNode)
-{
-	TREE_NODE *l_child = AVL_NULL;
-	TREE_NODE *pNode = (TREE_NODE *)(*ppNode);
+static void R_Rotate(TREE_NODE **ppNode) {
+    TREE_NODE *l_child = AVL_NULL;
+    TREE_NODE *pNode = (TREE_NODE *) (*ppNode);
 
-	l_child = pNode->left_child;
-	pNode->left_child = l_child->right_child;
-	if(l_child->right_child)
-		l_child->right_child->tree_root = pNode;
-	l_child->right_child = pNode;
-	l_child->tree_root = pNode->tree_root;
-	pNode->tree_root = l_child;
-	(*ppNode) = l_child;
+    l_child = pNode->left_child;
+    pNode->left_child = l_child->right_child;
+    if (l_child->right_child)
+        l_child->right_child->tree_root = pNode;
+    l_child->right_child = pNode;
+    l_child->tree_root = pNode->tree_root;
+    pNode->tree_root = l_child;
+    (*ppNode) = l_child;
 }
 
 
@@ -134,11 +129,11 @@ static void R_Rotate(TREE_NODE **ppNode)
 * 
 * L_Rotate(TREE_NODE **ppNode)
 * 
-* ¶þ²æÊ÷ÒÔ*ppNodeÎª¸ù½Úµã£¬½øÐÐ×óÐý×ª²Ù×÷
+* äºŒå‰æ ‘ä»¥*ppNodeä¸ºæ ¹èŠ‚ç‚¹ï¼Œè¿›è¡Œå·¦æ—‹è½¬æ“ä½œ
 * 
-* Returns         :  ÎÞ
+* Returns         :  æ— 
 *                   
-*          ×ÖÄ¸ºóÃæµÄÊý×Ö±íÊ¾ÊÇÆ½ºâÒò×Ó
+*          å­—æ¯åŽé¢çš„æ•°å­—è¡¨ç¤ºæ˜¯å¹³è¡¡å› å­
 *                             
 *           B-2                  D0                
 *          / \       ==>        / \                      
@@ -147,20 +142,19 @@ static void R_Rotate(TREE_NODE **ppNode)
 *           C0  E-1          A0  C0  F0                  
 *                \
 *                 F0       
-*******************************************************************/ 
-static void L_Rotate(TREE_NODE **ppNode)
-{
-	TREE_NODE *r_child = AVL_NULL;
-	TREE_NODE *pNode = (TREE_NODE *)(*ppNode);
+*******************************************************************/
+static void L_Rotate(TREE_NODE **ppNode) {
+    TREE_NODE *r_child = AVL_NULL;
+    TREE_NODE *pNode = (TREE_NODE *) (*ppNode);
 
-	r_child = pNode->right_child;
-	pNode->right_child = r_child->left_child;
-	if(r_child->left_child)
-		r_child->left_child->tree_root = pNode;
-	r_child->left_child = pNode;
-	r_child->tree_root = pNode->tree_root;
-	pNode->tree_root = r_child;
-	(*ppNode) = r_child;
+    r_child = pNode->right_child;
+    pNode->right_child = r_child->left_child;
+    if (r_child->left_child)
+        r_child->left_child->tree_root = pNode;
+    r_child->left_child = pNode;
+    r_child->tree_root = pNode->tree_root;
+    pNode->tree_root = r_child;
+    (*ppNode) = r_child;
 }
 
 
@@ -168,57 +162,54 @@ static void L_Rotate(TREE_NODE **ppNode)
 * 
 * LeftBalance(TREE_NODE **ppNode)
 * 
-* ¶þ²æÊ÷*ppNode×ó±ßÆ«¸ß£¬Ê§È¥Æ½ºâ£¬½øÐÐ×óÆ½ºâ²Ù×÷
+* äºŒå‰æ ‘*ppNodeå·¦è¾¹åé«˜ï¼Œå¤±åŽ»å¹³è¡¡ï¼Œè¿›è¡Œå·¦å¹³è¡¡æ“ä½œ
 * 
-* Returns         :  ÎÞ
-********************************************************************/ 
-static void LeftBalance(TREE_NODE **ppNode)
-{
-	TREE_NODE *left_child = AVL_NULL;
-	TREE_NODE *right_child = AVL_NULL;
-	TREE_NODE *tree_root = AVL_NULL;
-	TREE_NODE *pNode = (TREE_NODE *)(*ppNode);
+* Returns         :  æ— 
+********************************************************************/
+static void LeftBalance(TREE_NODE **ppNode) {
+    TREE_NODE *left_child = AVL_NULL;
+    TREE_NODE *right_child = AVL_NULL;
+    TREE_NODE *tree_root = AVL_NULL;
+    TREE_NODE *pNode = (TREE_NODE *) (*ppNode);
 
-	tree_root = pNode->tree_root;               /*±£´æµ±Ç°½ÚµãµÄ¸¸½Úµã*/
-	left_child = pNode->left_child;             /*±£´æµ±Ç°½ÚµãµÄ×ó×ÓÊ÷*/
-	switch(left_child->bf)
-	{
-	case LH_FACTOR:                             /*Èç¹û×ó×ÓÊ÷µÄÆ½ºâÒò×ÓÎª1£¬Ö¤Ã÷Ô­Ê¼×´Ì¬Îª×ó×ÓÊ÷±ÈÓÒ×ÓÊ÷¸ß*/
-		pNode->bf = left_child->bf = EH_FACTOR; /*µ±Ç°½ÚµãµÄÆ½ºâÒò×ÓºÍ×ó×ÓÊ÷µÄÆ½ºâÒò×ÓÉèÎª0*/
-		R_Rotate(ppNode);  /*µ±Ç°×ÓÊ÷ÓÒÐý*/
-		break;
-	case RH_FACTOR:                             /*Èç¹û×ó×ÓÊ÷µÄÆ½ºâÒò×ÓÎª-1£¬Ö¤Ã÷Ô­Ê¼×´Ì¬ÎªÓÒ×ÓÊ÷±È×ó×ÓÊ÷¸ß*/
-		                                        /*ÄÇÃ´Æ½ºâÒò×ÓµÄ¼ÆËã¾ÍÐèÒª¸ù¾ÝÓÒ×ÓÊ÷µÄÆ½ºâÒò×ÓÀ´¼ÆËã*/
-		right_child = left_child->right_child;
-		switch(right_child->bf)
-		{
-		case LH_FACTOR:
-			pNode->bf = RH_FACTOR;
-			left_child->bf = EH_FACTOR;
-			break;
-		case EH_FACTOR:
-			pNode->bf = left_child->bf = EH_FACTOR;
-			break;
-		case RH_FACTOR:
-			pNode->bf = EH_FACTOR;
-			left_child->bf = LH_FACTOR;
-			break;
-		}
-		right_child->bf = EH_FACTOR;
-		L_Rotate(&pNode->left_child);          /*½«±¾½ÚµãµÄ×ó×ÓÊ÷½øÐÐ×óÐý*/
-		R_Rotate(ppNode);                      /*½«±¾½Úµã½øÐÐÓÒÐý*/
-		break;
-	case EH_FACTOR:                            /*×ó×ÓÊ÷µÄÆ½ºâÒò×ÓÎª0£¬±íÃ÷Ô­Ê¼×´Ì¬ÏÂ¸Ã×ÓÊ÷ÊÇÆ½ºâµÄ*/
-		pNode->bf = LH_FACTOR;
-		left_child->bf = RH_FACTOR;
-		R_Rotate(ppNode);                     /*½«±¾½Úµã½øÐÐÓÒÐý*/
-		break;
-	}
-	(*ppNode)->tree_root = tree_root;
-	if(tree_root && tree_root->left_child == pNode)
-		tree_root->left_child = *ppNode;
-	if(tree_root && tree_root->right_child == pNode)
-		tree_root->right_child = *ppNode;
+    tree_root = pNode->tree_root;               /*ä¿å­˜å½“å‰èŠ‚ç‚¹çš„çˆ¶èŠ‚ç‚¹*/
+    left_child = pNode->left_child;             /*ä¿å­˜å½“å‰èŠ‚ç‚¹çš„å·¦å­æ ‘*/
+    switch (left_child->bf) {
+        case LH_FACTOR:                             /*å¦‚æžœå·¦å­æ ‘çš„å¹³è¡¡å› å­ä¸º1ï¼Œè¯æ˜ŽåŽŸå§‹çŠ¶æ€ä¸ºå·¦å­æ ‘æ¯”å³å­æ ‘é«˜*/
+            pNode->bf = left_child->bf = EH_FACTOR; /*å½“å‰èŠ‚ç‚¹çš„å¹³è¡¡å› å­å’Œå·¦å­æ ‘çš„å¹³è¡¡å› å­è®¾ä¸º0*/
+            R_Rotate(ppNode);  /*å½“å‰å­æ ‘å³æ—‹*/
+            break;
+        case RH_FACTOR:                             /*å¦‚æžœå·¦å­æ ‘çš„å¹³è¡¡å› å­ä¸º-1ï¼Œè¯æ˜ŽåŽŸå§‹çŠ¶æ€ä¸ºå³å­æ ‘æ¯”å·¦å­æ ‘é«˜*/
+            /*é‚£ä¹ˆå¹³è¡¡å› å­çš„è®¡ç®—å°±éœ€è¦æ ¹æ®å³å­æ ‘çš„å¹³è¡¡å› å­æ¥è®¡ç®—*/
+            right_child = left_child->right_child;
+            switch (right_child->bf) {
+                case LH_FACTOR:
+                    pNode->bf = RH_FACTOR;
+                    left_child->bf = EH_FACTOR;
+                    break;
+                case EH_FACTOR:
+                    pNode->bf = left_child->bf = EH_FACTOR;
+                    break;
+                case RH_FACTOR:
+                    pNode->bf = EH_FACTOR;
+                    left_child->bf = LH_FACTOR;
+                    break;
+            }
+            right_child->bf = EH_FACTOR;
+            L_Rotate(&pNode->left_child);          /*å°†æœ¬èŠ‚ç‚¹çš„å·¦å­æ ‘è¿›è¡Œå·¦æ—‹*/
+            R_Rotate(ppNode);                      /*å°†æœ¬èŠ‚ç‚¹è¿›è¡Œå³æ—‹*/
+            break;
+        case EH_FACTOR:                            /*å·¦å­æ ‘çš„å¹³è¡¡å› å­ä¸º0ï¼Œè¡¨æ˜ŽåŽŸå§‹çŠ¶æ€ä¸‹è¯¥å­æ ‘æ˜¯å¹³è¡¡çš„*/
+            pNode->bf = LH_FACTOR;
+            left_child->bf = RH_FACTOR;
+            R_Rotate(ppNode);                     /*å°†æœ¬èŠ‚ç‚¹è¿›è¡Œå³æ—‹*/
+            break;
+    }
+    (*ppNode)->tree_root = tree_root;
+    if (tree_root && tree_root->left_child == pNode)
+        tree_root->left_child = *ppNode;
+    if (tree_root && tree_root->right_child == pNode)
+        tree_root->right_child = *ppNode;
 }
 
 
@@ -226,56 +217,53 @@ static void LeftBalance(TREE_NODE **ppNode)
 * 
 * RightBalance(TREE_NODE **ppNode)
 * 
-* ¶þ²æÊ÷*ppNodeÓÒ±ßÆ«¸ß£¬Ê§È¥Æ½ºâ£¬½øÐÐÓÒÆ½ºâ²Ù×÷
+* äºŒå‰æ ‘*ppNodeå³è¾¹åé«˜ï¼Œå¤±åŽ»å¹³è¡¡ï¼Œè¿›è¡Œå³å¹³è¡¡æ“ä½œ
 * 
-* Returns         :  ÎÞ
-********************************************************************/ 
-static void RightBalance(TREE_NODE **ppNode)
-{
-	TREE_NODE *left_child = AVL_NULL;
-	TREE_NODE *right_child = AVL_NULL;
-	TREE_NODE *tree_root = AVL_NULL;
-	TREE_NODE *pNode = (TREE_NODE *)(*ppNode);
+* Returns         :  æ— 
+********************************************************************/
+static void RightBalance(TREE_NODE **ppNode) {
+    TREE_NODE *left_child = AVL_NULL;
+    TREE_NODE *right_child = AVL_NULL;
+    TREE_NODE *tree_root = AVL_NULL;
+    TREE_NODE *pNode = (TREE_NODE *) (*ppNode);
 
-	tree_root = pNode->tree_root;
-	right_child = pNode->right_child;
-	switch(right_child->bf)
-	{
-	case RH_FACTOR:
-		pNode->bf = right_child->bf = EH_FACTOR;
-		L_Rotate(ppNode);
-		break;
-	case LH_FACTOR:
-		left_child = right_child->left_child;
-		switch(left_child->bf)
-		{
-		case RH_FACTOR:
-			pNode->bf = LH_FACTOR;
-			right_child->bf = EH_FACTOR;
-			break;
-		case EH_FACTOR:
-			pNode->bf = right_child->bf = EH_FACTOR;
-			break;
-		case LH_FACTOR:
-			pNode->bf = EH_FACTOR;
-			right_child->bf = RH_FACTOR;
-			break;
-		}
-		left_child->bf = EH_FACTOR;
-		R_Rotate(&pNode->right_child);
-		L_Rotate(ppNode);
-		break;
-	case EH_FACTOR:
-		pNode->bf = RH_FACTOR;
-		right_child->bf = LH_FACTOR;
-		L_Rotate(ppNode);
-		break;
-	}
-	(*ppNode)->tree_root = tree_root;
-	if(tree_root && tree_root->left_child == pNode)
-		tree_root->left_child = *ppNode;
-	if(tree_root && tree_root->right_child == pNode)
-		tree_root->right_child = *ppNode;
+    tree_root = pNode->tree_root;
+    right_child = pNode->right_child;
+    switch (right_child->bf) {
+        case RH_FACTOR:
+            pNode->bf = right_child->bf = EH_FACTOR;
+            L_Rotate(ppNode);
+            break;
+        case LH_FACTOR:
+            left_child = right_child->left_child;
+            switch (left_child->bf) {
+                case RH_FACTOR:
+                    pNode->bf = LH_FACTOR;
+                    right_child->bf = EH_FACTOR;
+                    break;
+                case EH_FACTOR:
+                    pNode->bf = right_child->bf = EH_FACTOR;
+                    break;
+                case LH_FACTOR:
+                    pNode->bf = EH_FACTOR;
+                    right_child->bf = RH_FACTOR;
+                    break;
+            }
+            left_child->bf = EH_FACTOR;
+            R_Rotate(&pNode->right_child);
+            L_Rotate(ppNode);
+            break;
+        case EH_FACTOR:
+            pNode->bf = RH_FACTOR;
+            right_child->bf = LH_FACTOR;
+            L_Rotate(ppNode);
+            break;
+    }
+    (*ppNode)->tree_root = tree_root;
+    if (tree_root && tree_root->left_child == pNode)
+        tree_root->left_child = *ppNode;
+    if (tree_root && tree_root->right_child == pNode)
+        tree_root->right_child = *ppNode;
 }
 
 
@@ -283,97 +271,88 @@ static void RightBalance(TREE_NODE **ppNode)
 * 
 * avlDelBalance(tAVLTree *pTree , TREE_NODE *pNode,int L_R_MINUS)
 * 
-* É¾³ý½ÚµãÖ®ºó£¬¶þ²æÊ÷¿ÉÄÜÒÑ¾­²»Æ½ºâÁË£¬´ËÊ±ÐèÒªÓÃ
-* ´Ëº¯ÊýÀ´ÊµÏÖÉ¾³ý½ÚµãÖ®ºóµÄÆ½ºâ²Ù×÷¡£
-* ×ÓÊ÷×ÔÆ½ºâµÄ¹ý³ÌÖÐ£¬¿ÉÄÜ³öÏÖÒ»ÖÖÇé¿ö£ºÄÇ¾ÍÊÇ×ÓÊ÷×ÔÉíÆ½ºâÁË£¬µ«ÊÇ
-* ÆÆ»µÁË¸¸Ç×µÄÆ½ºâÐÔ£¬ËùÒÔ´Ëº¯Êý×öÁËµÝ¹éÆ½ºâ²Ù×÷£¬ÄÜ¹»Ê¹×îÐ¡²»Æ½ºâ
-* ×ÓÊ÷Ö®ÉÏµÄËùÓÐ×æÏÈ½Úµã¶¼ÄÜ¹»Æ½ºâ¡£
-* ×î»µ¿ÉÄÜµÄÇé¿ö¾ÍÊÇ´Ó×îÐ¡²»Æ½ºâ×ÖÊýµÄÊ÷¸ùÒ»Ö±µ½Õû¸ö´óÊ÷µÄÊ÷¸ù½Úµã
-* Ö®¼äµÄËùÓÐ×ÓÊ÷¶¼²»Æ½ºâ£¬²»¹ýÕâÖÖ¸ÅÂÊºÜµÍ£¬Ò»°ãÀ´ËµµÝ¹é×î¶àÈý´Î¾Í
-* ¿ÉÒÔÊµÏÖÕû¸öÊ÷µÄÆ½ºâ
-* pTree 		:  ¶þ²æÊ÷Ö¸Õë
-* pNode		:  ×îÐ¡²»Æ½ºâ×ÓÊ÷µÄ¸ù½Úµã
+* åˆ é™¤èŠ‚ç‚¹ä¹‹åŽï¼ŒäºŒå‰æ ‘å¯èƒ½å·²ç»ä¸å¹³è¡¡äº†ï¼Œæ­¤æ—¶éœ€è¦ç”¨
+* æ­¤å‡½æ•°æ¥å®žçŽ°åˆ é™¤èŠ‚ç‚¹ä¹‹åŽçš„å¹³è¡¡æ“ä½œã€‚
+* å­æ ‘è‡ªå¹³è¡¡çš„è¿‡ç¨‹ä¸­ï¼Œå¯èƒ½å‡ºçŽ°ä¸€ç§æƒ…å†µï¼šé‚£å°±æ˜¯å­æ ‘è‡ªèº«å¹³è¡¡äº†ï¼Œä½†æ˜¯
+* ç ´åäº†çˆ¶äº²çš„å¹³è¡¡æ€§ï¼Œæ‰€ä»¥æ­¤å‡½æ•°åšäº†é€’å½’å¹³è¡¡æ“ä½œï¼Œèƒ½å¤Ÿä½¿æœ€å°ä¸å¹³è¡¡
+* å­æ ‘ä¹‹ä¸Šçš„æ‰€æœ‰ç¥–å…ˆèŠ‚ç‚¹éƒ½èƒ½å¤Ÿå¹³è¡¡ã€‚
+* æœ€åå¯èƒ½çš„æƒ…å†µå°±æ˜¯ä»Žæœ€å°ä¸å¹³è¡¡å­—æ•°çš„æ ‘æ ¹ä¸€ç›´åˆ°æ•´ä¸ªå¤§æ ‘çš„æ ‘æ ¹èŠ‚ç‚¹
+* ä¹‹é—´çš„æ‰€æœ‰å­æ ‘éƒ½ä¸å¹³è¡¡ï¼Œä¸è¿‡è¿™ç§æ¦‚çŽ‡å¾ˆä½Žï¼Œä¸€èˆ¬æ¥è¯´é€’å½’æœ€å¤šä¸‰æ¬¡å°±
+* å¯ä»¥å®žçŽ°æ•´ä¸ªæ ‘çš„å¹³è¡¡
+* pTree 		:  äºŒå‰æ ‘æŒ‡é’ˆ
+* pNode		:  æœ€å°ä¸å¹³è¡¡å­æ ‘çš„æ ¹èŠ‚ç‚¹
 * L_R_MINUS	:  
-*			LEFT_MINUS    -- ×ó±ßÊ§È¥Æ½ºâ£¬Ê÷¸ß¼õÉÙÁË1²ã
-*                      RIGHT_MINUS  -- ÓÒ±ßÊ§È¥Æ½ºâ£¬Ê÷¸ß¼õÉÙÁË1²ã
+*			LEFT_MINUS    -- å·¦è¾¹å¤±åŽ»å¹³è¡¡ï¼Œæ ‘é«˜å‡å°‘äº†1å±‚
+*                      RIGHT_MINUS  -- å³è¾¹å¤±åŽ»å¹³è¡¡ï¼Œæ ‘é«˜å‡å°‘äº†1å±‚
 *
-* Returns         :  ÎÞ
-******************************************************************/ 
+* Returns         :  æ— 
+******************************************************************/
 static int avlDelBalance
-(
- tAVLTree *pTree , 
- TREE_NODE *pNode,
- int L_R_MINUS
- )
-{
-	TREE_NODE *tree_root = AVL_NULL;
+        (
+                tAVLTree *pTree,
+                TREE_NODE *pNode,
+                int L_R_MINUS
+        ) {
+    TREE_NODE *tree_root = AVL_NULL;
 
-	tree_root = pNode->tree_root;
-	if(L_R_MINUS == LEFT_MINUS)
-	{
-		switch(pNode->bf)
-		{
-		case EH_FACTOR:
-			pNode->bf = RH_FACTOR;
-			break;
-		case RH_FACTOR:
-			RightBalance(&pNode);
-			if(!tree_root)
-				pTree->pTreeHeader = pNode;
-			if(pNode->tree_root && pNode->bf == EH_FACTOR)
-			{
-				if(pNode->tree_root->left_child == pNode)
-					avlDelBalance(pTree , pNode->tree_root , LEFT_MINUS);
-				else
-					avlDelBalance(pTree , pNode->tree_root , RIGHT_MINUS);
-			}
-			break;
-		case LH_FACTOR:
-			pNode->bf = EH_FACTOR;
-			if(pNode->tree_root && pNode->bf == EH_FACTOR)
-			{
-				if(pNode->tree_root->left_child == pNode)
-					avlDelBalance(pTree , pNode->tree_root , LEFT_MINUS);
-				else
-					avlDelBalance(pTree , pNode->tree_root , RIGHT_MINUS);
-			}
-			break;
-		}
-	}
+    tree_root = pNode->tree_root;
+    if (L_R_MINUS == LEFT_MINUS) {
+        switch (pNode->bf) {
+            case EH_FACTOR:
+                pNode->bf = RH_FACTOR;
+                break;
+            case RH_FACTOR:
+                RightBalance(&pNode);
+                if (!tree_root)
+                    pTree->pTreeHeader = pNode;
+                if (pNode->tree_root && pNode->bf == EH_FACTOR) {
+                    if (pNode->tree_root->left_child == pNode)
+                        avlDelBalance(pTree, pNode->tree_root, LEFT_MINUS);
+                    else
+                        avlDelBalance(pTree, pNode->tree_root, RIGHT_MINUS);
+                }
+                break;
+            case LH_FACTOR:
+                pNode->bf = EH_FACTOR;
+                if (pNode->tree_root && pNode->bf == EH_FACTOR) {
+                    if (pNode->tree_root->left_child == pNode)
+                        avlDelBalance(pTree, pNode->tree_root, LEFT_MINUS);
+                    else
+                        avlDelBalance(pTree, pNode->tree_root, RIGHT_MINUS);
+                }
+                break;
+        }
+    }
 
-	if(L_R_MINUS == RIGHT_MINUS)
-	{
-		switch(pNode->bf)
-		{
-		case EH_FACTOR:
-			pNode->bf = LH_FACTOR;
-			break;
-		case LH_FACTOR:
-			LeftBalance(&pNode);
-			if(!tree_root)
-				pTree->pTreeHeader = pNode;
-			if(pNode->tree_root && pNode->bf == EH_FACTOR)
-			{
-				if(pNode->tree_root->left_child == pNode)
-					avlDelBalance(pTree , pNode->tree_root , LEFT_MINUS);
-				else
-					avlDelBalance(pTree , pNode->tree_root , RIGHT_MINUS);
-			}
-			break;
-		case RH_FACTOR:
-			pNode->bf = EH_FACTOR;
-			if(pNode->tree_root && pNode->bf == EH_FACTOR)
-			{
-				if(pNode->tree_root->left_child == pNode)
-					avlDelBalance(pTree , pNode->tree_root , LEFT_MINUS);
-				else
-					avlDelBalance(pTree , pNode->tree_root , RIGHT_MINUS);
-			}
-			break;
-		}
-	}
+    if (L_R_MINUS == RIGHT_MINUS) {
+        switch (pNode->bf) {
+            case EH_FACTOR:
+                pNode->bf = LH_FACTOR;
+                break;
+            case LH_FACTOR:
+                LeftBalance(&pNode);
+                if (!tree_root)
+                    pTree->pTreeHeader = pNode;
+                if (pNode->tree_root && pNode->bf == EH_FACTOR) {
+                    if (pNode->tree_root->left_child == pNode)
+                        avlDelBalance(pTree, pNode->tree_root, LEFT_MINUS);
+                    else
+                        avlDelBalance(pTree, pNode->tree_root, RIGHT_MINUS);
+                }
+                break;
+            case RH_FACTOR:
+                pNode->bf = EH_FACTOR;
+                if (pNode->tree_root && pNode->bf == EH_FACTOR) {
+                    if (pNode->tree_root->left_child == pNode)
+                        avlDelBalance(pTree, pNode->tree_root, LEFT_MINUS);
+                    else
+                        avlDelBalance(pTree, pNode->tree_root, RIGHT_MINUS);
+                }
+                break;
+        }
+    }
 
-	return 1;
+    return 1;
 }
 
 
@@ -381,438 +360,406 @@ static int avlDelBalance
 * 
 * AVL_TREE_LOCK(tAVLTree *pTree , int timeout)
 * 
-* Ëø¶¨¶þ²æÊ÷£¬·ÀÖ¹¶à¸öÈÎÎñÍ¬Ê±¶ÔÊ÷½øÐÐÌí¼Ó»òÉ¾³ý²Ù×÷
-* ´Ëº¯ÊýÊÇÕë¶ÔvxworksÏµÍ³µÄÀ©Õ¹£¬Èç¹û²»ÊÇvxworksÏµÍ³£¬ÄÇÃ´Ê÷µÄ»¥³â²Ù×÷
-* ÐèÒª×Ô¶¨Òå
-* timeout		: µÈ´ýÊ±¼ä£¬vxworks²Ù×÷ÏµÍ³ÀïÃætimeout=1¾ÍÊÇ1/60Ãë
+* é”å®šäºŒå‰æ ‘ï¼Œé˜²æ­¢å¤šä¸ªä»»åŠ¡åŒæ—¶å¯¹æ ‘è¿›è¡Œæ·»åŠ æˆ–åˆ é™¤æ“ä½œ
+* æ­¤å‡½æ•°æ˜¯é’ˆå¯¹vxworksç³»ç»Ÿçš„æ‰©å±•ï¼Œå¦‚æžœä¸æ˜¯vxworksç³»ç»Ÿï¼Œé‚£ä¹ˆæ ‘çš„äº’æ–¥æ“ä½œ
+* éœ€è¦è‡ªå®šä¹‰
+* timeout		: ç­‰å¾…æ—¶é—´ï¼Œvxworksæ“ä½œç³»ç»Ÿé‡Œé¢timeout=1å°±æ˜¯1/60ç§’
 *
-* Returns         :  ÎÞ
-*********************************************************************/ 
+* Returns         :  æ— 
+*********************************************************************/
 void AVL_TREE_LOCK
-(
- tAVLTree *pTree,
- int timeout
- )
-{
-	if(!pTree
-#if OS==3 || OS==4		
-		|| !pTree->sem
-#endif		
-		)
-		return;
-
-#if OS==3 || OS==4
-	semTake(pTree->sem,timeout);
+        (
+                tAVLTree *pTree,
+                int timeout
+        ) {
+    if (!pTree
+#if OS == 3 || OS == 4
+        || !pTree->sem
 #endif
-	return;
+            )
+        return;
+
+#if OS == 3 || OS == 4
+    semTake(pTree->sem,timeout);
+#endif
+    return;
 }
 
 /********************************************************************* 
 * 
 * AVL_TREE_UNLOCK(tAVLTree *pTree , int timeout)
 * 
-* ½â³ýËø¶¨
-* ´Ëº¯ÊýÊÇÕë¶ÔvxworksÏµÍ³µÄÀ©Õ¹£¬Èç¹û²»ÊÇvxworksÏµÍ³£¬ÄÇÃ´Ê÷µÄ»¥³â²Ù×÷
-* ÐèÒª×Ô¶¨Òå
-* Returns         :  ÎÞ
-*********************************************************************/ 
+* è§£é™¤é”å®š
+* æ­¤å‡½æ•°æ˜¯é’ˆå¯¹vxworksç³»ç»Ÿçš„æ‰©å±•ï¼Œå¦‚æžœä¸æ˜¯vxworksç³»ç»Ÿï¼Œé‚£ä¹ˆæ ‘çš„äº’æ–¥æ“ä½œ
+* éœ€è¦è‡ªå®šä¹‰
+* Returns         :  æ— 
+*********************************************************************/
 void AVL_TREE_UNLOCK
-(
- tAVLTree *pTree
- )
-{
-	if(!pTree
-#if OS==3 || OS==4		
-		|| !pTree->sem
-#endif		
-		)
-		return;
-
-#if OS==3 || OS==4
-	semGive(pTree->sem);
+        (
+                tAVLTree *pTree
+        ) {
+    if (!pTree
+#if OS == 3 || OS == 4
+        || !pTree->sem
 #endif
-	return;
+            )
+        return;
+
+#if OS == 3 || OS == 4
+    semGive(pTree->sem);
+#endif
+    return;
 }
 
 /******************************************************************** 
 * 
 * AVL_TREENODE_FREE(tAVLTree *pTree , TREE_NODE *pNode)
 * 
-* ÊÍ·ÅÒ»¸ö½ÚµãËùÕ¼ÓÃµÄÄÚ´æ£¬ÊÍ·Åº¯ÊýÐèÒªÓÃ»§×Ô¶¨Òå
-* £¬²¢ÇÒÐèÒªÔÚ´´½¨¶þ²æÊ÷µÄÊ±ºò´«µÝ¸ø¶þ²æÊ÷
+* é‡Šæ”¾ä¸€ä¸ªèŠ‚ç‚¹æ‰€å ç”¨çš„å†…å­˜ï¼Œé‡Šæ”¾å‡½æ•°éœ€è¦ç”¨æˆ·è‡ªå®šä¹‰
+* ï¼Œå¹¶ä¸”éœ€è¦åœ¨åˆ›å»ºäºŒå‰æ ‘çš„æ—¶å€™ä¼ é€’ç»™äºŒå‰æ ‘
 * 
-* Returns         :  ÎÞ
-*********************************************************************/ 
+* Returns         :  æ— 
+*********************************************************************/
 void AVL_TREENODE_FREE
-(
- tAVLTree *pTree,
- TREE_NODE *pNode
- )
-{
-	if(!pTree || !pNode)
-		return;
+        (
+                tAVLTree *pTree,
+                TREE_NODE *pNode
+        ) {
+    if (!pTree || !pNode)
+        return;
 
-	(*pTree->free)(pNode);
-	return ;
+    (*pTree->free)(pNode);
+    return;
 }
 
 #ifdef ORDER_LIST_WANTED
-/******************************************************************************** 
+
+/********************************************************************************
 * 
 * orderListInsert
 *	(
-*	tAVLTree *pTree,	      //Ê÷½á¹¹µÄÖ¸Õë	
-*	TREE_NODE *pNode ,    //pInsertNode¼´½«²åÔÚ´Ë½ÚµãÇ°Ãæ»òºóÃæ
-*	TREE_NODE *pInsertNode, //¼´½«²åÈëµÄ½ÚµãÖ¸Õë
-*	int prev_or_next      // INSERT_PREV : ´ý²åÈë½Úµã²åÔÚpNodeÖ®Ç°
-*                                           INSERT_NEXT : ´ý²åÈë½Úµã²åÔÚpNodeÖ®ºó           
+*	tAVLTree *pTree,	      //æ ‘ç»“æž„çš„æŒ‡é’ˆ	
+*	TREE_NODE *pNode ,    //pInsertNodeå³å°†æ’åœ¨æ­¤èŠ‚ç‚¹å‰é¢æˆ–åŽé¢
+*	TREE_NODE *pInsertNode, //å³å°†æ’å…¥çš„èŠ‚ç‚¹æŒ‡é’ˆ
+*	int prev_or_next      // INSERT_PREV : å¾…æ’å…¥èŠ‚ç‚¹æ’åœ¨pNodeä¹‹å‰
+*                                           INSERT_NEXT : å¾…æ’å…¥èŠ‚ç‚¹æ’åœ¨pNodeä¹‹åŽ           
 *	)
 * 
-*   µ±Æ½ºâ¶þ²æÊ÷ÀïÔö¼ÓÒ»¸ö½ÚµãÖ®ºó£¬ÓÃ´Ëº¯ÊýÀ´¸üÐÂ
-*  ÓÐÐòË«ÏòÁ´±í
+*   å½“å¹³è¡¡äºŒå‰æ ‘é‡Œå¢žåŠ ä¸€ä¸ªèŠ‚ç‚¹ä¹‹åŽï¼Œç”¨æ­¤å‡½æ•°æ¥æ›´æ–°
+*  æœ‰åºåŒå‘é“¾è¡¨
 * 
-* Returns         :  1:³É¹¦  0:Ê§°Ü
-*********************************************************************************/ 
+* Returns         :  1:æˆåŠŸ  0:å¤±è´¥
+*********************************************************************************/
 static int orderListInsert
-(
- tAVLTree *pTree,
- TREE_NODE *pNode , 
- TREE_NODE *pInsertNode,
- int prev_or_next
- )
-{
-	TREE_NODE *p = AVL_NULL;
+        (
+                tAVLTree *pTree,
+                TREE_NODE *pNode,
+                TREE_NODE *pInsertNode,
+                int prev_or_next
+        ) {
+    TREE_NODE *p = AVL_NULL;
 
-	if(!pNode)
-		return 0;
+    if (!pNode)
+        return 0;
 
-	if(prev_or_next == INSERT_PREV)
-	{
-		p = pNode->prev;
-		if(p)	p->next = pInsertNode;
-		else	pTree->pListHeader = pInsertNode;
+    if (prev_or_next == INSERT_PREV) {
+        p = pNode->prev;
+        if (p) p->next = pInsertNode;
+        else pTree->pListHeader = pInsertNode;
 
-		pInsertNode->prev = p;
-		pInsertNode->next = pNode;
-		pNode->prev = pInsertNode;
-	}
+        pInsertNode->prev = p;
+        pInsertNode->next = pNode;
+        pNode->prev = pInsertNode;
+    }
 
-	if(prev_or_next == INSERT_NEXT)
-	{
-		p = pNode->next;
-		if(p)	p->prev = pInsertNode;
-		else	pTree->pListTail = pInsertNode;
+    if (prev_or_next == INSERT_NEXT) {
+        p = pNode->next;
+        if (p) p->prev = pInsertNode;
+        else pTree->pListTail = pInsertNode;
 
-		pInsertNode->prev = pNode;
-		pInsertNode->next = p;
-		pNode->next = pInsertNode;
-	}
-	return 1;
+        pInsertNode->prev = pNode;
+        pInsertNode->next = p;
+        pNode->next = pInsertNode;
+    }
+    return 1;
 }
 
 /******************************************************************** 
 * int orderListRemove
 *	(
-*	tAVLTree *pTree,    //Ê÷½á¹¹µÄÖ¸Õë
-*	TREE_NODE *pRemoveNode   //¼´½«´ÓÓÐÐòË«ÏòÁ´±íÖÐÉ¾³ýµÄ½Úµã
+*	tAVLTree *pTree,    //æ ‘ç»“æž„çš„æŒ‡é’ˆ
+*	TREE_NODE *pRemoveNode   //å³å°†ä»Žæœ‰åºåŒå‘é“¾è¡¨ä¸­åˆ é™¤çš„èŠ‚ç‚¹
 *	)
 * 
-*   µ±Æ½ºâ¶þ²æÊ÷ÀïÉ¾³ýÒ»¸ö½ÚµãÖ®ºó£¬ÓÃ´Ëº¯ÊýÀ´¸üÐÂ
-*  ÓÐÐòË«ÏòÁ´±í
+*   å½“å¹³è¡¡äºŒå‰æ ‘é‡Œåˆ é™¤ä¸€ä¸ªèŠ‚ç‚¹ä¹‹åŽï¼Œç”¨æ­¤å‡½æ•°æ¥æ›´æ–°
+*  æœ‰åºåŒå‘é“¾è¡¨
 * 
-* Returns         :  1:³É¹¦   0:Ê§°Ü
-********************************************************************/ 
+* Returns         :  1:æˆåŠŸ   0:å¤±è´¥
+********************************************************************/
 static int orderListRemove
-(
- tAVLTree *pTree,
- TREE_NODE *pRemoveNode
- )
-{
-	TREE_NODE *pPrev = AVL_NULL;
-	TREE_NODE *pNext = AVL_NULL;
+        (
+                tAVLTree *pTree,
+                TREE_NODE *pRemoveNode
+        ) {
+    TREE_NODE *pPrev = AVL_NULL;
+    TREE_NODE *pNext = AVL_NULL;
 
-	if(!pRemoveNode)
-		return 0;
+    if (!pRemoveNode)
+        return 0;
 
-	pPrev = pRemoveNode->prev;
-	pNext = pRemoveNode->next;
-	if(!pPrev && !pNext)
-	{
-		pTree->pListHeader = pTree->pListTail = AVL_NULL;
-		return 1;
-	}
-	if(pPrev && pNext)
-	{
-		pPrev->next = pNext;
-		pNext->prev = pPrev;
-		return 1;
-	}
+    pPrev = pRemoveNode->prev;
+    pNext = pRemoveNode->next;
+    if (!pPrev && !pNext) {
+        pTree->pListHeader = pTree->pListTail = AVL_NULL;
+        return 1;
+    }
+    if (pPrev && pNext) {
+        pPrev->next = pNext;
+        pNext->prev = pPrev;
+        return 1;
+    }
 
-	if(pPrev)
-	{
-		pPrev->next = AVL_NULL;
-		pTree->pListTail = pPrev;
-		return 1;
-	}
+    if (pPrev) {
+        pPrev->next = AVL_NULL;
+        pTree->pListTail = pPrev;
+        return 1;
+    }
 
-	if(pNext)
-	{
-		pNext->prev = AVL_NULL;
-		pTree->pListHeader = pNext;
-		return 1;
-	}
-	else 
-	{
-		return 0;
-	}
+    if (pNext) {
+        pNext->prev = AVL_NULL;
+        pTree->pListHeader = pNext;
+        return 1;
+    } else {
+        return 0;
+    }
 }
 
 
 /******************************************************************** 
 *      avlTreeFirst(tAVLTree *pTree)
 * 
-*   »ñÈ¡ÓÐÐòË«ÏòÁ´±íÀïÃæµÄµÚÒ»¸ö³ÉÔ±½Úµã
+*   èŽ·å–æœ‰åºåŒå‘é“¾è¡¨é‡Œé¢çš„ç¬¬ä¸€ä¸ªæˆå‘˜èŠ‚ç‚¹
 * 
-* Returns         :  ³É¹¦:  µÚÒ»¸ö³ÉÔ±½ÚµãµÄÖ¸Õë
-*                         Ê§°Ü:  AVL_NULL
-*********************************************************************/ 
+* Returns         :  æˆåŠŸ:  ç¬¬ä¸€ä¸ªæˆå‘˜èŠ‚ç‚¹çš„æŒ‡é’ˆ
+*                         å¤±è´¥:  AVL_NULL
+*********************************************************************/
 TREE_NODE *avlTreeFirst
-(
- tAVLTree *pTree
- )
-{
-	if(!pTree)
-		return AVL_NULL;
+        (
+                tAVLTree *pTree
+        ) {
+    if (!pTree)
+        return AVL_NULL;
 
-	if(!pTree->count || !pTree->pTreeHeader)
-		return AVL_NULL;
+    if (!pTree->count || !pTree->pTreeHeader)
+        return AVL_NULL;
 
-	return (TREE_NODE *)pTree->pListHeader;
+    return (TREE_NODE *) pTree->pListHeader;
 }
 
 
 /******************************************************************** 
 *      avlTreeLast(tAVLTree *pTree)
 * 
-*   »ñÈ¡ÓÐÐòË«ÏòÁ´±íÀïÃæµÄ×îºóÒ»¸ö³ÉÔ±½Úµã
+*   èŽ·å–æœ‰åºåŒå‘é“¾è¡¨é‡Œé¢çš„æœ€åŽä¸€ä¸ªæˆå‘˜èŠ‚ç‚¹
 * 
-* Returns         :  ³É¹¦:  ×îºóÒ»¸ö³ÉÔ±½ÚµãµÄÖ¸Õë
-*                         Ê§°Ü:  AVL_NULL
-*********************************************************************/ 
+* Returns         :  æˆåŠŸ:  æœ€åŽä¸€ä¸ªæˆå‘˜èŠ‚ç‚¹çš„æŒ‡é’ˆ
+*                         å¤±è´¥:  AVL_NULL
+*********************************************************************/
 TREE_NODE *avlTreeLast
-(
- tAVLTree *pTree
- )
-{
-	if(!pTree)
-		return AVL_NULL;
+        (
+                tAVLTree *pTree
+        ) {
+    if (!pTree)
+        return AVL_NULL;
 
-	if(!pTree->count || !pTree->pTreeHeader)
-		return AVL_NULL;
+    if (!pTree->count || !pTree->pTreeHeader)
+        return AVL_NULL;
 
-	return (TREE_NODE *)pTree->pListTail;
+    return (TREE_NODE *) pTree->pListTail;
 }
 
 /******************************************************************** 
 *      avlTreeNext(TREE_NODE *pNode)
 * 
-*   »ñÈ¡ÓÐÐòË«ÏòÁ´±íÀïÃæµ±Ç°³ÉÔ±½ÚµãµÄºóÒ»¸ö½Úµã
+*   èŽ·å–æœ‰åºåŒå‘é“¾è¡¨é‡Œé¢å½“å‰æˆå‘˜èŠ‚ç‚¹çš„åŽä¸€ä¸ªèŠ‚ç‚¹
 * 
-* Returns         :  ³É¹¦: ºóÒ»¸ö³ÉÔ±½ÚµãµÄÖ¸Õë
-*                         Ê§°Ü:  AVL_NULL
-*********************************************************************/ 
+* Returns         :  æˆåŠŸ: åŽä¸€ä¸ªæˆå‘˜èŠ‚ç‚¹çš„æŒ‡é’ˆ
+*                         å¤±è´¥:  AVL_NULL
+*********************************************************************/
 TREE_NODE *avlTreeNext
-(
- TREE_NODE *pNode
- )
-{
-	if(!pNode)
-		return AVL_NULL;
+        (
+                TREE_NODE *pNode
+        ) {
+    if (!pNode)
+        return AVL_NULL;
 
-	return (TREE_NODE *)pNode->next;
+    return (TREE_NODE *) pNode->next;
 }
 
 /******************************************************************** 
 *      avlTreePrev(TREE_NODE *pNode)
 * 
-*   »ñÈ¡ÓÐÐòË«ÏòÁ´±íÀïÃæµ±Ç°³ÉÔ±½ÚµãµÄÇ°Ò»¸ö½Úµã
+*   èŽ·å–æœ‰åºåŒå‘é“¾è¡¨é‡Œé¢å½“å‰æˆå‘˜èŠ‚ç‚¹çš„å‰ä¸€ä¸ªèŠ‚ç‚¹
 * 
-* Returns         :  ³É¹¦: Ç°Ò»¸ö³ÉÔ±½ÚµãµÄÖ¸Õë
-*                         Ê§°Ü:  AVL_NULL
-*********************************************************************/ 
+* Returns         :  æˆåŠŸ: å‰ä¸€ä¸ªæˆå‘˜èŠ‚ç‚¹çš„æŒ‡é’ˆ
+*                         å¤±è´¥:  AVL_NULL
+*********************************************************************/
 TREE_NODE *avlTreePrev
-(
- TREE_NODE *pNode
- )
-{
-	if(!pNode)
-		return AVL_NULL;
+        (
+                TREE_NODE *pNode
+        ) {
+    if (!pNode)
+        return AVL_NULL;
 
-	return (TREE_NODE *)pNode->prev;
+    return (TREE_NODE *) pNode->prev;
 }
+
 #endif
 
 /*****************************************************************************************
 *      int avlTreeInsert
 *	(
-*	tAVLTree *pTree ,      //Ê÷½á¹¹µÄÖ¸Õë
-*	TREE_NODE **ppNode ,  //´ý²åÈë½ÚµãËùÔÚµÄ×ÓÊ÷µÄÖ¸ÕëµÄÖ¸Õë
-*	TREE_NODE *pInsertNode,  //´ý²åÈëµÄ½Úµã
-*	int *growthFlag  //×ÓÊ÷ÊÇ·ñ³¤¸ßµÄ±êÖ¾ *growthFlag=1±íÊ¾³¤¸ß1²ã *growthFlag=0±íÊ¾Ã»ÓÐ
+*	tAVLTree *pTree ,      //æ ‘ç»“æž„çš„æŒ‡é’ˆ
+*	TREE_NODE **ppNode ,  //å¾…æ’å…¥èŠ‚ç‚¹æ‰€åœ¨çš„å­æ ‘çš„æŒ‡é’ˆçš„æŒ‡é’ˆ
+*	TREE_NODE *pInsertNode,  //å¾…æ’å…¥çš„èŠ‚ç‚¹
+*	int *growthFlag  //å­æ ‘æ˜¯å¦é•¿é«˜çš„æ ‡å¿— *growthFlag=1è¡¨ç¤ºé•¿é«˜1å±‚ *growthFlag=0è¡¨ç¤ºæ²¡æœ‰
 *	)
 * 
-*   ½«Ò»¸ö½Úµã²åÈëÒ»¿Å×ÓÊ÷Ö®ÖÐ£¬²åÈë¹ý³ÌÖ®ÖÐ¿ÉÄÜµ¼ÖÂ×ÓÊ÷²»
-*  Æ½ºâ£¬´Ëº¯Êý»¹½«Ö´ÐÐµÝ¹éÆ½ºâ²Ù×÷£¬Ö±µ½ËùÓÐ×ÓÊ÷¾ùÆ½ºâÎªÖ¹
+*   å°†ä¸€ä¸ªèŠ‚ç‚¹æ’å…¥ä¸€é¢—å­æ ‘ä¹‹ä¸­ï¼Œæ’å…¥è¿‡ç¨‹ä¹‹ä¸­å¯èƒ½å¯¼è‡´å­æ ‘ä¸
+*  å¹³è¡¡ï¼Œæ­¤å‡½æ•°è¿˜å°†æ‰§è¡Œé€’å½’å¹³è¡¡æ“ä½œï¼Œç›´åˆ°æ‰€æœ‰å­æ ‘å‡å¹³è¡¡ä¸ºæ­¢
 * 
-* Returns         :  1:³É¹¦
-*                         0:Ê§°Ü
-******************************************************************************************/ 
+* Returns         :  1:æˆåŠŸ
+*                         0:å¤±è´¥
+******************************************************************************************/
 static int avlTreeInsert
-(
- tAVLTree *pTree , 
- TREE_NODE **ppNode , 
- TREE_NODE *pInsertNode,
- int *growthFlag
- )
-{
-	int compFlag = 0;
-	TREE_NODE *pNode = (TREE_NODE *)(*ppNode);
+        (
+                tAVLTree *pTree,
+                TREE_NODE **ppNode,
+                TREE_NODE *pInsertNode,
+                int *growthFlag
+        ) {
+    int compFlag = 0;
+    TREE_NODE *pNode = (TREE_NODE *) (*ppNode);
 
-	if(pTree->count == 0)
-	{
-		pTree->pTreeHeader = pInsertNode;
-		pInsertNode->bf = EH_FACTOR;
-		pInsertNode->left_child = pInsertNode->right_child = AVL_NULL;
-		pInsertNode->tree_root = AVL_NULL;
+    if (pTree->count == 0) {
+        pTree->pTreeHeader = pInsertNode;
+        pInsertNode->bf = EH_FACTOR;
+        pInsertNode->left_child = pInsertNode->right_child = AVL_NULL;
+        pInsertNode->tree_root = AVL_NULL;
 #ifdef ORDER_LIST_WANTED
-		pTree->pListHeader = pTree->pListTail = pInsertNode;
-		pInsertNode->prev = pInsertNode->next = AVL_NULL;
+        pTree->pListHeader = pTree->pListTail = pInsertNode;
+        pInsertNode->prev = pInsertNode->next = AVL_NULL;
 #endif
-		return 1;
-	}
+        return 1;
+    }
 
-	compFlag = ((*pTree->keyCompare)(pNode , pInsertNode));
-	if(!compFlag)
-	{
-		*growthFlag = 0;
-		return 0;
-	}
+    compFlag = ((*pTree->keyCompare)(pNode, pInsertNode));
+    if (!compFlag) {
+        *growthFlag = 0;
+        return 0;
+    }
 
-	if(compFlag < 0)
-	{
-		if(!pNode->left_child)
-		{
-			pNode->left_child = pInsertNode;
-			pInsertNode->bf = EH_FACTOR;
-			pInsertNode->left_child = pInsertNode->right_child = AVL_NULL;
-			pInsertNode->tree_root = (TREE_NODE *)pNode;
+    if (compFlag < 0) {
+        if (!pNode->left_child) {
+            pNode->left_child = pInsertNode;
+            pInsertNode->bf = EH_FACTOR;
+            pInsertNode->left_child = pInsertNode->right_child = AVL_NULL;
+            pInsertNode->tree_root = (TREE_NODE *) pNode;
 #ifdef ORDER_LIST_WANTED
-			orderListInsert(pTree,pNode, pInsertNode, INSERT_PREV);
+            orderListInsert(pTree, pNode, pInsertNode, INSERT_PREV);
 #endif
-			switch(pNode->bf)
-			{
-			case EH_FACTOR:
-				pNode->bf = LH_FACTOR;
-				*growthFlag = 1;
-				break;
-			case RH_FACTOR:
-				pNode->bf = EH_FACTOR;
-				*growthFlag = 0;
-				break;
-			}
-		}
-		else
-		{
-			if(!avlTreeInsert(pTree, &pNode->left_child,pInsertNode, growthFlag))
-				return 0;
+            switch (pNode->bf) {
+                case EH_FACTOR:
+                    pNode->bf = LH_FACTOR;
+                    *growthFlag = 1;
+                    break;
+                case RH_FACTOR:
+                    pNode->bf = EH_FACTOR;
+                    *growthFlag = 0;
+                    break;
+            }
+        } else {
+            if (!avlTreeInsert(pTree, &pNode->left_child, pInsertNode, growthFlag))
+                return 0;
 
-			if(*growthFlag)
-			{
-				switch(pNode->bf)
-				{
-				case LH_FACTOR:
-					LeftBalance(ppNode);
-					*growthFlag = 0;
-					break;
-				case EH_FACTOR:
-					pNode->bf = LH_FACTOR;
-					*growthFlag = 1;
-					break;
-				case RH_FACTOR:
-					pNode->bf = EH_FACTOR;
-					*growthFlag = 0;
-					break;
-				}
-			}
-		}
-	}
+            if (*growthFlag) {
+                switch (pNode->bf) {
+                    case LH_FACTOR:
+                        LeftBalance(ppNode);
+                        *growthFlag = 0;
+                        break;
+                    case EH_FACTOR:
+                        pNode->bf = LH_FACTOR;
+                        *growthFlag = 1;
+                        break;
+                    case RH_FACTOR:
+                        pNode->bf = EH_FACTOR;
+                        *growthFlag = 0;
+                        break;
+                }
+            }
+        }
+    }
 
-	if(compFlag > 0)
-	{
-		if(!pNode->right_child)
-		{
-			pNode->right_child = pInsertNode;
-			pInsertNode->bf = EH_FACTOR;
-			pInsertNode->left_child = pInsertNode->right_child = AVL_NULL;
-			pInsertNode->tree_root = (TREE_NODE *)pNode;
+    if (compFlag > 0) {
+        if (!pNode->right_child) {
+            pNode->right_child = pInsertNode;
+            pInsertNode->bf = EH_FACTOR;
+            pInsertNode->left_child = pInsertNode->right_child = AVL_NULL;
+            pInsertNode->tree_root = (TREE_NODE *) pNode;
 #ifdef ORDER_LIST_WANTED
-			orderListInsert(pTree,pNode, pInsertNode, INSERT_NEXT);
+            orderListInsert(pTree, pNode, pInsertNode, INSERT_NEXT);
 #endif
-			switch(pNode->bf)
-			{
-			case EH_FACTOR:
-				pNode->bf = RH_FACTOR;
-				*growthFlag = 1;
-				break;
-			case LH_FACTOR:
-				pNode->bf = EH_FACTOR;
-				*growthFlag = 0;
-				break;
-			}
-		}
-		else
-		{
-			if(!avlTreeInsert(pTree, &pNode->right_child,pInsertNode, growthFlag))
-				return 0;
+            switch (pNode->bf) {
+                case EH_FACTOR:
+                    pNode->bf = RH_FACTOR;
+                    *growthFlag = 1;
+                    break;
+                case LH_FACTOR:
+                    pNode->bf = EH_FACTOR;
+                    *growthFlag = 0;
+                    break;
+            }
+        } else {
+            if (!avlTreeInsert(pTree, &pNode->right_child, pInsertNode, growthFlag))
+                return 0;
 
-			if(*growthFlag)
-			{
-				switch(pNode->bf)
-				{
-				case LH_FACTOR:
-					pNode->bf = EH_FACTOR;
-					*growthFlag = 0;
-					break;
-				case EH_FACTOR:
-					pNode->bf = RH_FACTOR;
-					*growthFlag = 1;
-					break;
-				case RH_FACTOR:
-					RightBalance(ppNode);
-					*growthFlag = 0;
-					break;
-				}
-			}
-		}
-	}
+            if (*growthFlag) {
+                switch (pNode->bf) {
+                    case LH_FACTOR:
+                        pNode->bf = EH_FACTOR;
+                        *growthFlag = 0;
+                        break;
+                    case EH_FACTOR:
+                        pNode->bf = RH_FACTOR;
+                        *growthFlag = 1;
+                        break;
+                    case RH_FACTOR:
+                        RightBalance(ppNode);
+                        *growthFlag = 0;
+                        break;
+                }
+            }
+        }
+    }
 
-	return 1;
+    return 1;
 }
 
 
 /******************************************************************** 
 *      int avlTreeRemove
 *	(
-*	tAVLTree *pTree ,      //Ê÷½á¹¹µÄÖ¸Õë
-*	TREE_NODE *pRemoveNode  //´ýÉ¾³ý½ÚµãµÄÖ¸Õë
+*	tAVLTree *pTree ,      //æ ‘ç»“æž„çš„æŒ‡é’ˆ
+*	TREE_NODE *pRemoveNode  //å¾…åˆ é™¤èŠ‚ç‚¹çš„æŒ‡é’ˆ
 *	)
 * 
-*   ´ÓÊ÷ÀïÃæÉ¾³ýÒ»¸ö½Úµã£¬´Ëº¯ÊýÄÜ¹»×öµÝ¹é²Ù×÷£¬ÄÜ¹»
-*  Ñ­»·×ÔÆ½ºâ£¬Ê¹ËùÓÐÊÜÉ¾³ý½ÚµãÓ°Ïì¶øµ¼ÖÂ²»Æ½ºâµÄ×ÓÊ÷
-*  ¶¼ÄÜ×ÔÆ½ºâ
+*   ä»Žæ ‘é‡Œé¢åˆ é™¤ä¸€ä¸ªèŠ‚ç‚¹ï¼Œæ­¤å‡½æ•°èƒ½å¤Ÿåšé€’å½’æ“ä½œï¼Œèƒ½å¤Ÿ
+*  å¾ªçŽ¯è‡ªå¹³è¡¡ï¼Œä½¿æ‰€æœ‰å—åˆ é™¤èŠ‚ç‚¹å½±å“è€Œå¯¼è‡´ä¸å¹³è¡¡çš„å­æ ‘
+*  éƒ½èƒ½è‡ªå¹³è¡¡
 * 
-* Returns         :  1:³É¹¦
-*                    0:Ê§°Ü
+* Returns         :  1:æˆåŠŸ
+*                    0:å¤±è´¥
 *                                                    
 *          C               C                                                           
 *         / \             / \                     C                                     
@@ -822,163 +769,142 @@ static int avlTreeInsert
 *             / \             / \             A   D   G                                 
 *            F   H          .E.  H                     \                                  
 *                                                       H                  
-*      É¾³ýE½Úµã  ==> ÕÒµ½±ÈE´óÒ»µãµÄF ==>  É¾³ýE½Úµã£¬×ÔÆ½ºâ                                                           
-*                     FºÍE»¥»»Ö¸Õë                                                
-********************************************************************/ 
+*      åˆ é™¤EèŠ‚ç‚¹  ==> æ‰¾åˆ°æ¯”Eå¤§ä¸€ç‚¹çš„F ==>  åˆ é™¤EèŠ‚ç‚¹ï¼Œè‡ªå¹³è¡¡                                                           
+*                     Få’ŒEäº’æ¢æŒ‡é’ˆ                                                
+********************************************************************/
 static int avlTreeRemove
-(
- tAVLTree *pTree , 
- TREE_NODE *pRemoveNode
- )
-{
-	int compFlag = 0;
-	TREE_NODE *tree_root = AVL_NULL;
-	TREE_NODE *p = AVL_NULL;
-	TREE_NODE *root_p = AVL_NULL;
-	TREE_NODE swapNode;
+        (
+                tAVLTree *pTree,
+                TREE_NODE *pRemoveNode
+        ) {
+    int compFlag = 0;
+    TREE_NODE *tree_root = AVL_NULL;
+    TREE_NODE *p = AVL_NULL;
+    TREE_NODE *root_p = AVL_NULL;
+    TREE_NODE swapNode;
 
-	tree_root = pRemoveNode->tree_root;
-	if(!pRemoveNode->left_child && !pRemoveNode->right_child)
-	{
-		if(!tree_root)
-		{
-			pTree->pTreeHeader = AVL_NULL;
+    tree_root = pRemoveNode->tree_root;
+    if (!pRemoveNode->left_child && !pRemoveNode->right_child) {
+        if (!tree_root) {
+            pTree->pTreeHeader = AVL_NULL;
 #ifdef ORDER_LIST_WANTED
-			pTree->pListHeader = pTree->pListTail = AVL_NULL;
+            pTree->pListHeader = pTree->pListTail = AVL_NULL;
 #endif
-			return 1;
-		}
-		else if(tree_root->left_child == pRemoveNode)
-		{
+            return 1;
+        } else if (tree_root->left_child == pRemoveNode) {
 #ifdef ORDER_LIST_WANTED
-			orderListRemove(pTree, pRemoveNode);
+            orderListRemove(pTree, pRemoveNode);
 #endif
-			tree_root->left_child = AVL_NULL;
-			avlDelBalance(pTree, tree_root , LEFT_MINUS);
-		}
-		else
-		{
+            tree_root->left_child = AVL_NULL;
+            avlDelBalance(pTree, tree_root, LEFT_MINUS);
+        } else {
 #ifdef ORDER_LIST_WANTED
-			orderListRemove(pTree, pRemoveNode);
+            orderListRemove(pTree, pRemoveNode);
 #endif
-			tree_root->right_child = AVL_NULL;
-			avlDelBalance(pTree, tree_root , RIGHT_MINUS);
-		}
-	}
+            tree_root->right_child = AVL_NULL;
+            avlDelBalance(pTree, tree_root, RIGHT_MINUS);
+        }
+    }
 
-	if(pRemoveNode->left_child && pRemoveNode->right_child)
-	{
-		TREE_NODE *prev = AVL_NULL;
-		TREE_NODE *next = AVL_NULL;
-		TREE_NODE *r_child = AVL_NULL;
-		root_p = pRemoveNode;
-		p = pRemoveNode->right_child;
-		while(p->left_child)
-		{
-			root_p = p;
-			p = p->left_child;
-		}
-		if(p == pRemoveNode->right_child)
-		{
-			p->tree_root = p;
-			pRemoveNode->right_child = pRemoveNode;
-		}
-		swapNode = *p;
-		prev = p->prev;
-		next = p->next;
-		*p = *pRemoveNode;
-		p->prev = prev;
-		p->next = next;
-		prev = pRemoveNode->prev;
-		next = pRemoveNode->next;
-		*pRemoveNode = swapNode;
-		pRemoveNode->prev = prev;
-		pRemoveNode->next = next;
-		if(!tree_root) 
-			pTree->pTreeHeader = p;
-		else if(tree_root->left_child == pRemoveNode)
-			tree_root->left_child = p;
-		else
-			tree_root->right_child = p;
+    if (pRemoveNode->left_child && pRemoveNode->right_child) {
+        TREE_NODE *prev = AVL_NULL;
+        TREE_NODE *next = AVL_NULL;
+        TREE_NODE *r_child = AVL_NULL;
+        root_p = pRemoveNode;
+        p = pRemoveNode->right_child;
+        while (p->left_child) {
+            root_p = p;
+            p = p->left_child;
+        }
+        if (p == pRemoveNode->right_child) {
+            p->tree_root = p;
+            pRemoveNode->right_child = pRemoveNode;
+        }
+        swapNode = *p;
+        prev = p->prev;
+        next = p->next;
+        *p = *pRemoveNode;
+        p->prev = prev;
+        p->next = next;
+        prev = pRemoveNode->prev;
+        next = pRemoveNode->next;
+        *pRemoveNode = swapNode;
+        pRemoveNode->prev = prev;
+        pRemoveNode->next = next;
+        if (!tree_root)
+            pTree->pTreeHeader = p;
+        else if (tree_root->left_child == pRemoveNode)
+            tree_root->left_child = p;
+        else
+            tree_root->right_child = p;
 
-		if(p->left_child) 
-			p->left_child->tree_root = p;
-		if(p->right_child)  
-			p->right_child->tree_root = p;
+        if (p->left_child)
+            p->left_child->tree_root = p;
+        if (p->right_child)
+            p->right_child->tree_root = p;
 
-		if(pRemoveNode->left_child) 
-			pRemoveNode->left_child->tree_root = pRemoveNode;
-		if(pRemoveNode->right_child)  
-			pRemoveNode->right_child->tree_root = pRemoveNode;
+        if (pRemoveNode->left_child)
+            pRemoveNode->left_child->tree_root = pRemoveNode;
+        if (pRemoveNode->right_child)
+            pRemoveNode->right_child->tree_root = pRemoveNode;
 
-		if(root_p != pRemoveNode)
-		{
-			if(root_p->left_child == p)
-				root_p->left_child = pRemoveNode;
-			else 
-				root_p->right_child = pRemoveNode;
-		}
+        if (root_p != pRemoveNode) {
+            if (root_p->left_child == p)
+                root_p->left_child = pRemoveNode;
+            else
+                root_p->right_child = pRemoveNode;
+        }
 
-		return avlTreeRemove(pTree, pRemoveNode);
-	}
+        return avlTreeRemove(pTree, pRemoveNode);
+    }
 
-	if(pRemoveNode->left_child)
-	{
+    if (pRemoveNode->left_child) {
 #ifdef ORDER_LIST_WANTED
-		orderListRemove(pTree, pRemoveNode);
+        orderListRemove(pTree, pRemoveNode);
 #endif
-		if(!tree_root)
-		{
-			pTree->pTreeHeader = pRemoveNode->left_child;
-			pRemoveNode->left_child->tree_root = AVL_NULL;
-			return 1;
-		}
+        if (!tree_root) {
+            pTree->pTreeHeader = pRemoveNode->left_child;
+            pRemoveNode->left_child->tree_root = AVL_NULL;
+            return 1;
+        }
 
-		if(tree_root->left_child == pRemoveNode)
-		{
-			tree_root->left_child = pRemoveNode->left_child;
-			pRemoveNode->left_child->tree_root= tree_root;
-			avlDelBalance(pTree , tree_root , LEFT_MINUS);
-		}
-		else
-		{
-			tree_root->right_child = pRemoveNode->left_child;
-			pRemoveNode->left_child->tree_root = tree_root;
-			avlDelBalance(pTree , tree_root , RIGHT_MINUS);
-		}
+        if (tree_root->left_child == pRemoveNode) {
+            tree_root->left_child = pRemoveNode->left_child;
+            pRemoveNode->left_child->tree_root = tree_root;
+            avlDelBalance(pTree, tree_root, LEFT_MINUS);
+        } else {
+            tree_root->right_child = pRemoveNode->left_child;
+            pRemoveNode->left_child->tree_root = tree_root;
+            avlDelBalance(pTree, tree_root, RIGHT_MINUS);
+        }
 
-		return 1;
-	}
+        return 1;
+    }
 
-	if(pRemoveNode->right_child)
-	{
+    if (pRemoveNode->right_child) {
 #ifdef ORDER_LIST_WANTED
-		orderListRemove(pTree, pRemoveNode);
+        orderListRemove(pTree, pRemoveNode);
 #endif
-		if(!tree_root)
-		{
-			pTree->pTreeHeader = pRemoveNode->right_child;
-			pRemoveNode->right_child->tree_root = AVL_NULL;
-			return 1;
-		}
+        if (!tree_root) {
+            pTree->pTreeHeader = pRemoveNode->right_child;
+            pRemoveNode->right_child->tree_root = AVL_NULL;
+            return 1;
+        }
 
-		if(tree_root->left_child == pRemoveNode)
-		{
-			tree_root->left_child = pRemoveNode->right_child;
-			pRemoveNode->right_child->tree_root = tree_root;
-			avlDelBalance(pTree , tree_root , LEFT_MINUS);
-		}
-		else
-		{
-			tree_root->right_child = pRemoveNode->right_child;
-			pRemoveNode->right_child->tree_root = tree_root;
-			avlDelBalance(pTree , tree_root , RIGHT_MINUS);
-		}
+        if (tree_root->left_child == pRemoveNode) {
+            tree_root->left_child = pRemoveNode->right_child;
+            pRemoveNode->right_child->tree_root = tree_root;
+            avlDelBalance(pTree, tree_root, LEFT_MINUS);
+        } else {
+            tree_root->right_child = pRemoveNode->right_child;
+            pRemoveNode->right_child->tree_root = tree_root;
+            avlDelBalance(pTree, tree_root, RIGHT_MINUS);
+        }
 
-		return 1;
-	}
+        return 1;
+    }
 
-	return 1;
+    return 1;
 }
 
 /******************************************************************** 
@@ -989,31 +915,30 @@ static int avlTreeRemove
 *	TREE_NODE *pSearchKey
 *	)
 * 
-*    µÝ¹é²éÕÒ¹Ø¼ü×Ö±È½ÏÍêÈ«Æ¥ÅäµÄ½Úµã£¬±È½Ïº¯ÊýÊÇÔÚ
-*     Ê÷´´½¨µÄÊ±ºò¾ÍÖ¸¶¨ºÃµÄ
+*    é€’å½’æŸ¥æ‰¾å…³é”®å­—æ¯”è¾ƒå®Œå…¨åŒ¹é…çš„èŠ‚ç‚¹ï¼Œæ¯”è¾ƒå‡½æ•°æ˜¯åœ¨
+*     æ ‘åˆ›å»ºçš„æ—¶å€™å°±æŒ‡å®šå¥½çš„
 *
-* Returns         :  1:³É¹¦
-*                         0:Ê§°Ü
-*********************************************************************/ 
+* Returns         :  1:æˆåŠŸ
+*                         0:å¤±è´¥
+*********************************************************************/
 static TREE_NODE *avlTreeLookup
-(
- tAVLTree *pTree,
- TREE_NODE *pNode , 
- TREE_NODE *pSearchKey
- )
-{
-	int compFlag = 0;
-	if(!pTree || !pNode)
-		return AVL_NULL;
+        (
+                tAVLTree *pTree,
+                TREE_NODE *pNode,
+                TREE_NODE *pSearchKey
+        ) {
+    int compFlag = 0;
+    if (!pTree || !pNode)
+        return AVL_NULL;
 
-	compFlag = (*pTree->keyCompare)(pNode , pSearchKey);
-	if(!compFlag)
-		return (TREE_NODE *)pNode;
+    compFlag = (*pTree->keyCompare)(pNode, pSearchKey);
+    if (!compFlag)
+        return (TREE_NODE *) pNode;
 
-	if(compFlag>0) pNode = pNode->right_child;
-	else pNode = pNode->left_child;
+    if (compFlag > 0) pNode = pNode->right_child;
+    else pNode = pNode->left_child;
 
-	return (TREE_NODE *)avlTreeLookup(pTree, pNode, pSearchKey);
+    return (TREE_NODE *) avlTreeLookup(pTree, pNode, pSearchKey);
 }
 
 
@@ -1021,69 +946,66 @@ static TREE_NODE *avlTreeLookup
 /**************************AVL TREE API*****************************/
 /*******************************************************************/
 /*
-¡ïÃèÊö            : ´´½¨Ò»¿ÅÓÐÐòÆ½ºâ¶þ²æÊ÷
-¡ï²ÎÊýÃèÊö: 
-keyCompareFunc:±È½ÏÁ½¸ö½ÚµãµÄ´óÐ¡(¹Ø¼ü×ÖµÄ±È½Ï)
-¡ï·µ»ØÖµ      :
-³É¹¦ :   Æ½ºâ¶þ²æÊ÷µÄÖ¸Õë
-Ê§°Ü :   ¿ÕÖ¸Õë
+â˜…æè¿°            : åˆ›å»ºä¸€é¢—æœ‰åºå¹³è¡¡äºŒå‰æ ‘
+â˜…å‚æ•°æè¿°: 
+keyCompareFunc:æ¯”è¾ƒä¸¤ä¸ªèŠ‚ç‚¹çš„å¤§å°(å…³é”®å­—çš„æ¯”è¾ƒ)
+â˜…è¿”å›žå€¼      :
+æˆåŠŸ :   å¹³è¡¡äºŒå‰æ ‘çš„æŒ‡é’ˆ
+å¤±è´¥ :   ç©ºæŒ‡é’ˆ
 *******************************************************************/
-tAVLTree *avlTreeCreate(int *keyCompareFunc,int *freeFunc)
-{
-	tAVLTree *pTree = (tAVLTree *)0;
+tAVLTree *avlTreeCreate(int *keyCompareFunc, int *freeFunc) {
+    tAVLTree *pTree = (tAVLTree *) 0;
 
-	if(!keyCompareFunc || !freeFunc)
-		return (tAVLTree *)0;
+    if (!keyCompareFunc || !freeFunc)
+        return (tAVLTree *) 0;
 
-	pTree = (tAVLTree *)malloc(sizeof(tAVLTree));
-	
-	if(pTree != (tAVLTree *)0)
-	{
-		memset((void *)pTree , 0 , sizeof(tAVLTree));
-		pTree->keyCompare = (void *)keyCompareFunc;
-		pTree->free = (void *)freeFunc;
+    pTree = (tAVLTree *) malloc(sizeof(tAVLTree));
+
+    if (pTree != (tAVLTree *) 0) {
+        memset((void *) pTree, 0, sizeof(tAVLTree));
+        pTree->keyCompare = (void *) keyCompareFunc;
+        pTree->free = (void *) freeFunc;
 #ifdef ORDER_LIST_WANTED
-		pTree->pListHeader = pTree->pListTail = AVL_NULL;
+        pTree->pListHeader = pTree->pListTail = AVL_NULL;
 #endif
 
-#if OS==3 || OS==4 
-		pTree->sem = semBCreate(0 , 1);
-		if(!pTree->sem)
-		{
-			free((void *)pTree);
-			return (tAVLTree *)0;
-		}
+#if OS == 3 || OS == 4
+        pTree->sem = semBCreate(0 , 1);
+        if(!pTree->sem)
+        {
+            free((void *)pTree);
+            return (tAVLTree *)0;
+        }
 #endif
-	}
+    }
 
-	return (tAVLTree *)pTree;
+    return (tAVLTree *) pTree;
 }
 
 /*******************************************************************/
 /**************************AVL TREE API*****************************/
 /*******************************************************************/
 /*
-¡ïÃèÊö            :  É¾³ýÒ»¸ö½Úµã
+â˜…æè¿°            :  åˆ é™¤ä¸€ä¸ªèŠ‚ç‚¹
 
-¡ï²ÎÊýÃèÊö: 
-pTree:Ê÷½á¹¹µÄÖ¸Õë
-pDelNode : ´ýÉ¾³ýµÄ½ÚµãÖ¸Õë
-¡ï·µ»ØÖµ      :
-³É¹¦ :  1
-Ê§°Ü :   0
+â˜…å‚æ•°æè¿°: 
+pTree:æ ‘ç»“æž„çš„æŒ‡é’ˆ
+pDelNode : å¾…åˆ é™¤çš„èŠ‚ç‚¹æŒ‡é’ˆ
+â˜…è¿”å›žå€¼      :
+æˆåŠŸ :  1
+å¤±è´¥ :   0
 *******************************************************************/
-int avlTreeDel( tAVLTree *pTree ,TREE_NODE *pDelNode)
-{
-	int ret = 0;
+int avlTreeDel(tAVLTree *pTree, TREE_NODE *pDelNode) {
+    int ret = 0;
 
-	if(!pTree || !pDelNode || !pTree->count)
-		return 0;
+    if (!pTree || !pDelNode || !pTree->count)
+        return 0;
 
-	ret = avlTreeRemove(pTree, pDelNode);
-	if(ret)
-		pTree->count--;
+    ret = avlTreeRemove(pTree, pDelNode);
+    if (ret)
+        pTree->count--;
 
-	return 1;
+    return 1;
 }
 
 
@@ -1091,39 +1013,36 @@ int avlTreeDel( tAVLTree *pTree ,TREE_NODE *pDelNode)
 /**************************AVL TREE API*****************************/
 /*******************************************************************/
 /*
-¡ïÃèÊö            : ´Ý»ÙÒ»¿ÅÆ½ºâ¶þ²æÊ÷£¬²¢ÊÍ·ÅËùÓÐ³ÉÔ±½ÚµãÕ¼ÓÃµÄÄÚ´æ
-ÊÍ·ÅÄÚ´æµÄº¯ÊýÔÚ´´½¨Ê÷µÄÊ±ºòÒÑ¾­Ö¸¶¨ºÃ
-¡ï²ÎÊýÃèÊö: 
-pTree:Ê÷½á¹¹µÄÖ¸Õë
-¡ï·µ»ØÖµ      :
-³É¹¦ :  1
-Ê§°Ü :   0
+â˜…æè¿°            : æ‘§æ¯ä¸€é¢—å¹³è¡¡äºŒå‰æ ‘ï¼Œå¹¶é‡Šæ”¾æ‰€æœ‰æˆå‘˜èŠ‚ç‚¹å ç”¨çš„å†…å­˜
+é‡Šæ”¾å†…å­˜çš„å‡½æ•°åœ¨åˆ›å»ºæ ‘çš„æ—¶å€™å·²ç»æŒ‡å®šå¥½
+â˜…å‚æ•°æè¿°: 
+pTree:æ ‘ç»“æž„çš„æŒ‡é’ˆ
+â˜…è¿”å›žå€¼      :
+æˆåŠŸ :  1
+å¤±è´¥ :   0
 ********************************************************************/
 int avlTreeDestroy
-(
- tAVLTree *pTree
- )
-{
-	TREE_NODE *pNode = AVL_NULL;
-	if(!pTree)
-		return 0;
+        (
+                tAVLTree *pTree
+        ) {
+    TREE_NODE *pNode = AVL_NULL;
+    if (!pTree)
+        return 0;
 
-	while(pNode = pTree->pTreeHeader)
-	{
-		avlTreeDel(pTree,pNode);
-		AVL_TREENODE_FREE(pTree, pNode);
-	}
+    while (pNode = pTree->pTreeHeader) {
+        avlTreeDel(pTree, pNode);
+        AVL_TREENODE_FREE(pTree, pNode);
+    }
 
-	if(!pTree->count || !pTree->pTreeHeader)
-	{
-#if OS==3 || OS==4
-		semDelete(pTree->sem);
+    if (!pTree->count || !pTree->pTreeHeader) {
+#if OS == 3 || OS == 4
+        semDelete(pTree->sem);
 #endif
-		free((void *)pTree);
-		return 1;
-	}
+        free((void *) pTree);
+        return 1;
+    }
 
-	return 0;
+    return 0;
 }
 
 
@@ -1131,34 +1050,32 @@ int avlTreeDestroy
 /**************************AVL TREE API*****************************/
 /*******************************************************************/
 /*
-¡ïÃèÊö            : Çå¿ÕÒ»¿ÅÊ÷£¬ÊÍ·ÅËùÓÐ³ÉÔ±½ÚµãÕ¼ÓÃµÄÄÚ´æ£¬
-µ«ÊÇ²»ÊÍ·ÅÊ÷½á¹¹ËùÕ¼ÓÃµÄÄÚ´æ
-¡ï²ÎÊýÃèÊö: 
-pTree:Ê÷½á¹¹µÄÖ¸Õë
-¡ï·µ»ØÖµ      :
-³É¹¦ :  1
-Ê§°Ü :   0
+â˜…æè¿°            : æ¸…ç©ºä¸€é¢—æ ‘ï¼Œé‡Šæ”¾æ‰€æœ‰æˆå‘˜èŠ‚ç‚¹å ç”¨çš„å†…å­˜ï¼Œ
+ä½†æ˜¯ä¸é‡Šæ”¾æ ‘ç»“æž„æ‰€å ç”¨çš„å†…å­˜
+â˜…å‚æ•°æè¿°: 
+pTree:æ ‘ç»“æž„çš„æŒ‡é’ˆ
+â˜…è¿”å›žå€¼      :
+æˆåŠŸ :  1
+å¤±è´¥ :   0
 ********************************************************************/
 int avlTreeFlush
-(
- tAVLTree *pTree
- )
-{
-	TREE_NODE *pNode = AVL_NULL;
+        (
+                tAVLTree *pTree
+        ) {
+    TREE_NODE *pNode = AVL_NULL;
 
-	if(!pTree)
-		return 0;
+    if (!pTree)
+        return 0;
 
-	if(!pTree->count || !pTree->pTreeHeader)
-		return 1;
+    if (!pTree->count || !pTree->pTreeHeader)
+        return 1;
 
-	while(pNode = pTree->pTreeHeader)
-	{
-		avlTreeDel(pTree,pNode);
-		AVL_TREENODE_FREE(pTree, pNode);
-	}
+    while (pNode = pTree->pTreeHeader) {
+        avlTreeDel(pTree, pNode);
+        AVL_TREENODE_FREE(pTree, pNode);
+    }
 
-	return 0;
+    return 0;
 }
 
 
@@ -1166,30 +1083,29 @@ int avlTreeFlush
 /**************************AVL TREE API*****************************/
 /*******************************************************************/
 /*
-¡ïÃèÊö            :  Ôö¼ÓÒ»¸ö½Úµã
+â˜…æè¿°            :  å¢žåŠ ä¸€ä¸ªèŠ‚ç‚¹
 
-¡ï²ÎÊýÃèÊö: 
-pTree:Ê÷½á¹¹µÄÖ¸Õë
-pInsertNode : ´ýÌí¼ÓµÄ½ÚµãÖ¸Õë
-¡ï·µ»ØÖµ      :
-³É¹¦ :  1
-Ê§°Ü :   0
+â˜…å‚æ•°æè¿°: 
+pTree:æ ‘ç»“æž„çš„æŒ‡é’ˆ
+pInsertNode : å¾…æ·»åŠ çš„èŠ‚ç‚¹æŒ‡é’ˆ
+â˜…è¿”å›žå€¼      :
+æˆåŠŸ :  1
+å¤±è´¥ :   0
 *******************************************************************/
 int avlTreeAdd
-(
- tAVLTree *pTree , 
- TREE_NODE *pInsertNode
- )
-{
-	int growthFlag=0 , ret = 0;
+        (
+                tAVLTree *pTree,
+                TREE_NODE *pInsertNode
+        ) {
+    int growthFlag = 0, ret = 0;
 
-	if(!pTree || !pInsertNode)
-		return 0;
+    if (!pTree || !pInsertNode)
+        return 0;
 
-	ret = avlTreeInsert(pTree , &pTree->pTreeHeader , pInsertNode , &growthFlag);
-	if(ret)
-		pTree->count++;
-	return ret;
+    ret = avlTreeInsert(pTree, &pTree->pTreeHeader, pInsertNode, &growthFlag);
+    if (ret)
+        pTree->count++;
+    return ret;
 }
 
 
@@ -1198,47 +1114,45 @@ int avlTreeAdd
 /**************************AVL TREE API*****************************/
 /*******************************************************************/
 /*
-¡ïÃèÊö            : ¸ù¾Ý¹Ø¼ü×Ö½á¹¹À´²éÑ¯Ò»¸ö½ÚµãÊÇ·ñ´æÔÚ
+â˜…æè¿°            : æ ¹æ®å…³é”®å­—ç»“æž„æ¥æŸ¥è¯¢ä¸€ä¸ªèŠ‚ç‚¹æ˜¯å¦å­˜åœ¨
 
-¡ï²ÎÊýÃèÊö: 
-pTree:Ê÷½á¹¹µÄÖ¸Õë
-pKeyNode : ¹Ø¼ü×Ö½á¹¹Ö¸Õë
-¡ï·µ»ØÖµ      :
-³É¹¦ :  ²éÕÒµ½µÄ½ÚµãÖ¸Õë
-Ê§°Ü :   AVL_NULL
+â˜…å‚æ•°æè¿°: 
+pTree:æ ‘ç»“æž„çš„æŒ‡é’ˆ
+pKeyNode : å…³é”®å­—ç»“æž„æŒ‡é’ˆ
+â˜…è¿”å›žå€¼      :
+æˆåŠŸ :  æŸ¥æ‰¾åˆ°çš„èŠ‚ç‚¹æŒ‡é’ˆ
+å¤±è´¥ :   AVL_NULL
 ********************************************************************/
 TREE_NODE *avlTreeFind
-(
- tAVLTree *pTree,
- TREE_NODE *pKeyNode
- )
-{
-	if(!pTree || !pTree->count || !pTree->pTreeHeader)
-		return AVL_NULL;
+        (
+                tAVLTree *pTree,
+                TREE_NODE *pKeyNode
+        ) {
+    if (!pTree || !pTree->count || !pTree->pTreeHeader)
+        return AVL_NULL;
 
-	return (TREE_NODE *)avlTreeLookup(pTree, pTree->pTreeHeader , pKeyNode);
+    return (TREE_NODE *) avlTreeLookup(pTree, pTree->pTreeHeader, pKeyNode);
 }
 
 /*******************************************************************/
 /**************************AVL TREE API*****************************/
 /*******************************************************************/
 /*
-¡ïÃèÊö            : »ñÈ¡Ê÷ÀïÃæµÄËùÓÐ½Úµã×ÜÊý
+â˜…æè¿°            : èŽ·å–æ ‘é‡Œé¢çš„æ‰€æœ‰èŠ‚ç‚¹æ€»æ•°
 
-¡ï²ÎÊýÃèÊö: 
-pTree:Ê÷½á¹¹µÄÖ¸Õë
-¡ï·µ»ØÖµ      :
-Ê÷ÀïÃæµÄ½Úµã³ÉÔ±×ÜÊý
+â˜…å‚æ•°æè¿°: 
+pTree:æ ‘ç»“æž„çš„æŒ‡é’ˆ
+â˜…è¿”å›žå€¼      :
+æ ‘é‡Œé¢çš„èŠ‚ç‚¹æˆå‘˜æ€»æ•°
 ********************************************************************/
 unsigned int avlTreeCount
-(
- tAVLTree *pTree
- )
-{
-	if(!pTree)
-		return 0;
+        (
+                tAVLTree *pTree
+        ) {
+    if (!pTree)
+        return 0;
 
-	return pTree->count;
+    return pTree->count;
 }
 
 

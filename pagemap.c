@@ -119,7 +119,8 @@ find_ppn(struct ssd_info *ssd, unsigned int channel, unsigned int chip, unsigned
     int page_channel[100];                  /*这个数组存放的是每个channel的page数目*/
 
 #ifdef DEBUG
-    printf("enter find_psn,channel:%d, chip:%d, die:%d, plane:%d, block:%d, page:%d\n",channel,chip,die,plane,block,page);
+    printf("enter find_psn,channel:%d, chip:%d, die:%d, plane:%d, block:%d, page:%d\n", channel, chip, die, plane,
+           block, page);
 #endif
 
     /*********************************************
@@ -442,7 +443,7 @@ get_ppn(struct ssd_info *ssd, unsigned int channel, unsigned int chip, unsigned 
     unsigned int i = 0, j = 0, k = 0, l = 0, m = 0, n = 0;
 
 #ifdef DEBUG
-    printf("enter get_ppn,channel:%d, chip:%d, die:%d, plane:%d\n",channel,chip,die,plane);
+    printf("enter get_ppn,channel:%d, chip:%d, die:%d, plane:%d\n", channel, chip, die, plane);
 #endif
 
     full_page = ~(0xffffffff << (ssd->parameter->subpage_page));
@@ -486,7 +487,8 @@ get_ppn(struct ssd_info *ssd, unsigned int channel, unsigned int chip, unsigned 
             lpn) {
 
 #ifdef DEBUG_GET_PPN
-            printf("lpn = %d, lpn of location page = %d\n", lpn, ssd->channel_head[location->channel].chip_head[location->chip].die_head[location->die].plane_head[location->plane].blk_head[location->block].page_head[location->page].lpn);
+            printf("lpn = %d, lpn of location page = %d\n", lpn,
+                   ssd->channel_head[location->channel].chip_head[location->chip].die_head[location->die].plane_head[location->plane].blk_head[location->block].page_head[location->page].lpn);
             getchar();
 #endif
             printf("\nError in get_ppn()\n");
@@ -579,7 +581,7 @@ get_ppn_for_gc(struct ssd_info *ssd, unsigned int channel, unsigned int chip, un
     unsigned int active_block, block, page;
 
 #ifdef DEBUG
-    printf("enter get_ppn_for_gc,channel:%d, chip:%d, die:%d, plane:%d\n",channel,chip,die,plane);
+    printf("enter get_ppn_for_gc,channel:%d, chip:%d, die:%d, plane:%d\n", channel, chip, die, plane);
 #endif
 
     if (find_active_block(ssd, channel, chip, die, plane) != SUCCESS) {

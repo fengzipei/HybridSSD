@@ -1044,6 +1044,54 @@ void update_lru(struct ssd_info *ssd, int lpn, int type) {
     }
 }
 
+//migrate from flash to nvm
+void migrate(struct ssd_info *ssd, struct request *req, int lpn) {
+    //check if there are pages that can be migrate from flash to nvm
+    struct entry *tmp = ssd->dram->map->lru_head->post;
+    while (tmp != ssd->dram->map->lru_tail) {
+        if (tmp->remain_count >= ssd->parameter->remain_threshold) {
+            //create a read request to flash & migrate the mapping info
+            creat_sub_request(ssd, tmp->lpn, size(0x7fffffff), 0x7fffffff, req, READ);
+            //if nvm is full, create a write request to flash
+            if (ssd->dram->nvm_map->valid_page_num == 0) {
+                creat_sub_request(ssd, ssd->dram->nvm_map->lru_tail->pre->lpn, size(0x7fffffff), 0x7fffffff,
+                                  req, WRITE);
+                //mark the removed page in nvm as invalid
+                ssd->dram->nvm_map->map_entry[ssd->dram->nvm_map->lru_tail->pre->lpn].state = 0;
+                ssd->dram->nvm_map->valid_page_num++;
+                //here I need to update the lru list of nvm
+                ssd->dram->nvm_map->lru_tail->pre->pre->post = ssd->dram->nvm_map->lru_tail;
+                ssd->dram->nvm_map->lru_tail->pre->pre = NULL;
+                ssd->dram->nvm_map->lru_tail->pre->post = NULL;
+                ssd->dram->nvm_map->lru_tail->pre = ssd->dram->nvm_map->lru_tail->pre->pre;
+            }
+            //note that the lru list is based on lpn, meaning that erase & move page in flash won't
+            //impact the lru list
+            //the lru list of flash will only be changed when:
+            //  1. append write to flash (cover the condition that migrate from nvm to flash)
+            //  2. update write to flash
+            //  3. migrate from flash to nvm
+            //mark the page in flash as invalid and the page in nvm as valid
+            unsigned int ppn = ssd->dram->map->map_entry[lpn].pn;
+            struct local *location = find_location(ssd, ppn);
+            ssd->channel_head[location->channel].chip_head[location->chip].die_head[location->die].plane_head[location->plane].blk_head[location->block].page_head[location->page].free_state = 0;
+            ssd->channel_head[location->channel].chip_head[location->chip].die_head[location->die].plane_head[location->plane].blk_head[location->block].page_head[location->page].lpn = 0;
+            ssd->channel_head[location->channel].chip_head[location->chip].die_head[location->die].plane_head[location->plane].blk_head[location->block].page_head[location->page].valid_state = 0;
+            ssd->channel_head[location->channel].chip_head[location->chip].die_head[location->die].plane_head[location->plane].blk_head[location->block].invalid_page_num++;
+            ssd->dram->map->map_entry[lpn].pn = 0;
+            //here I need to remove this node from lru list of flash
+            ssd->dram->map->map_entry[lpn].pre->post = ssd->dram->map->map_entry[lpn].post;
+            ssd->dram->map->map_entry[lpn].post->pre = ssd->dram->map->map_entry[lpn].pre;
+            ssd->dram->map->map_entry[lpn].pre = NULL;
+            ssd->dram->map->map_entry[lpn].post = NULL;
+            ssd->dram->nvm_map->map_entry[lpn].state = 0x7fffffff;
+            ssd->dram->nvm_map->valid_page_num--;
+            update_lru(ssd, lpn, 1);
+        }
+        tmp = tmp->post;
+    }
+}
+
 
 /*********************************************************************************************
 *no_buffer_distribute()函数是处理当ssd没有dram的时候，
@@ -1091,53 +1139,10 @@ struct ssd_info *no_buffer_distribute(struct ssd_info *ssd) {
 #ifdef DEBUG
                 printf("enter flash read\n");
 #endif
-                sub = creat_sub_request(ssd, lpn, sub_size, sub_state, req, req->operation);
                 update_lru(ssd, lpn, 0);
-                //todo: migrate from flash to nvm
-                //check if there are pages that can be migrate from flash to nvm
-                struct entry *tmp = ssd->dram->map->lru_head->post;
-                while (tmp != ssd->dram->map->lru_tail) {
-                    if(tmp->remain_count >= ssd->parameter->remain_threshold) {
-                        //create a read request to flash & migrate the mapping info
-                        creat_sub_request(ssd, tmp->lpn, size(0x7fffffff), 0x7fffffff, req, READ);
-                        //if nvm is full, create a write request to flash
-                        if (ssd->dram->nvm_map->valid_page_num == 0) {
-                            creat_sub_request(ssd, ssd->dram->nvm_map->lru_tail->pre->lpn, size(0x7fffffff), 0x7fffffff,
-                                              req, WRITE);
-                            //mark the removed page in nvm as invalid
-                            ssd->dram->nvm_map->map_entry[ssd->dram->nvm_map->lru_tail->pre->lpn].state = 0;
-                            ssd->dram->nvm_map->valid_page_num++;
-                            //here I need to update the lru list of nvm
-                            ssd->dram->nvm_map->lru_tail->pre->pre->post = ssd->dram->nvm_map->lru_tail;
-                            ssd->dram->nvm_map->lru_tail->pre->pre = NULL;
-                            ssd->dram->nvm_map->lru_tail->pre->post = NULL;
-                            ssd->dram->nvm_map->lru_tail->pre = ssd->dram->nvm_map->lru_tail->pre->pre;
-                        }
-                        //note that the lru list is based on lpn, meaning that erase & move page in flash won't
-                        //impact the lru list
-                        //the lru list of flash will only be changed when:
-                        //  1. append write to flash (cover the condition that migrate from nvm to flash)
-                        //  2. update write to flash
-                        //  3. migrate from flash to nvm
-                        //mark the page in flash as invalid and the page in nvm as valid
-                        unsigned int ppn = ssd->dram->map->map_entry[lpn].pn;
-                        struct local *location = find_location(ssd, ppn);
-                        ssd->channel_head[location->channel].chip_head[location->chip].die_head[location->die].plane_head[location->plane].blk_head[location->block].page_head[location->page].free_state = 0;
-                        ssd->channel_head[location->channel].chip_head[location->chip].die_head[location->die].plane_head[location->plane].blk_head[location->block].page_head[location->page].lpn = 0;
-                        ssd->channel_head[location->channel].chip_head[location->chip].die_head[location->die].plane_head[location->plane].blk_head[location->block].page_head[location->page].valid_state = 0;
-                        ssd->channel_head[location->channel].chip_head[location->chip].die_head[location->die].plane_head[location->plane].blk_head[location->block].invalid_page_num++;
-                        ssd->dram->map->map_entry[lpn].pn = 0;
-                        //here I need to remove this node from lru list of flash
-                        ssd->dram->map->map_entry[lpn].pre->post = ssd->dram->map->map_entry[lpn].post;
-                        ssd->dram->map->map_entry[lpn].post->pre = ssd->dram->map->map_entry[lpn].pre;
-                        ssd->dram->map->map_entry[lpn].pre = NULL;
-                        ssd->dram->map->map_entry[lpn].post = NULL;
-                        ssd->dram->nvm_map->map_entry[lpn].state = 0x7fffffff;
-                        ssd->dram->nvm_map->valid_page_num--;
-                        update_lru(ssd, lpn, 1);
-                    }
-                    tmp = tmp->post;
-                }
+                creat_sub_request(ssd, lpn, sub_size, sub_state, req, req->operation);
+                //todo: migrate from flash to nvm (done)
+                migrate(ssd, req, lpn);
             }
             lpn++;
         }
@@ -1183,6 +1188,7 @@ struct ssd_info *no_buffer_distribute(struct ssd_info *ssd) {
                 } else {
                     update_lru(ssd, lpn, 1);
                     //todo: migrate from flash to nvm
+                    migrate(ssd, req, lpn);
                 }
             } else { //append write
                 if (ssd->dram->nvm_map->valid_page_num > 0 && req->size < 8) {
@@ -1207,8 +1213,8 @@ struct ssd_info *no_buffer_distribute(struct ssd_info *ssd) {
                     printf("leave flash append write\n");
 #endif
                     update_lru(ssd, lpn, 0);
-                    //todo: migrater from flash to nvm
-
+                    //todo: migrate from flash to nvm
+                    migrate(ssd, req, lpn);
                 }
             }
             lpn++;
