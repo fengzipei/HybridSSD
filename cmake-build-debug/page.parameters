@@ -88,5 +88,5 @@ aged=0;                         #1 for making SSD aged, 0 for keeping SSD non-ag
 aged ratio=0.7;                #If we need to make SSD aged, set the aged ratio in advance
 nvm page = 65535 # the capacity of nvm is 256MB
 split threshold = 16; # decide where will a page place
-migrate threshold = 5;
+migrate threshold = 10;
 remain threshold = 5;

@@ -91,32 +91,32 @@ aged=0;                         #1 for making SSD aged, 0 for keeping SSD non-ag
 aged ratio=0.7;                #If we need to make SSD aged, set the aged ratio in advance
 nvm page = 65535 # the capacity of nvm is 256MB
 split threshold = 16; # decide where will a page place
-migrate threshold = 5;
+migrate threshold = 10;
 remain threshold = 5;
 -----------------------simulation output----------------------
-the 0 channel, 0 chip, 0 die, 2048 plane has :          2669 erase operations
-the 0 channel, 0 chip, 1 die, 2048 plane has :          2668 erase operations
-the 0 channel, 1 chip, 0 die, 2048 plane has :          2668 erase operations
-the 0 channel, 1 chip, 1 die, 2048 plane has :          2668 erase operations
-the 1 channel, 0 chip, 0 die, 2048 plane has :          2670 erase operations
-the 1 channel, 0 chip, 1 die, 2048 plane has :          2670 erase operations
-the 1 channel, 1 chip, 0 die, 2048 plane has :          2670 erase operations
-the 1 channel, 1 chip, 1 die, 2048 plane has :          2670 erase operations
+the 0 channel, 0 chip, 0 die, 2048 plane has :          2307 erase operations
+the 0 channel, 0 chip, 1 die, 2048 plane has :          2308 erase operations
+the 0 channel, 1 chip, 0 die, 2048 plane has :          2307 erase operations
+the 0 channel, 1 chip, 1 die, 2048 plane has :          2307 erase operations
+the 1 channel, 0 chip, 0 die, 2048 plane has :          2306 erase operations
+the 1 channel, 0 chip, 1 die, 2048 plane has :          2307 erase operations
+the 1 channel, 1 chip, 0 die, 2048 plane has :          2307 erase operations
+the 1 channel, 1 chip, 1 die, 2048 plane has :          2306 erase operations
 
 
 ---------------------------statistic data---------------------------
 min lsn:             0
 max lsn:      29232672
 split threshhold:            16
-migrate threshold:             5
+migrate threshold:            10
 remain threshold:             5
-nvm read count:        622313
-nvm program count:       1168495
-read count:       1443977
-program count:       4909489                        include the flash write count leaded by read requests
-the read operation leaded by un-covered update count:        256978
-erase count:         42713
-direct erase count:         26733
+nvm read count:        598560
+nvm program count:       1536789
+read count:       1483876
+program count:       4537891                        include the flash write count leaded by read requests
+the read operation leaded by un-covered update count:        270810
+erase count:         36909
+direct erase count:         24250
 copy back count:             0
 multi-plane program count:             0
 multi-plane read count:             0
@@ -125,19 +125,19 @@ interleave read count:             0
 interleave two plane and one program count:             0
 interleave two plane count:             0
 gc copy back count:             0
-write flash count:       4201142
+write flash count:       3829544
 waste page count:             0
 interleave erase count:             0
 multiple plane erase count:             0
 interleave multiple plane erase count:             0
 read request count:        249162
 write request count:        750839
-read request average size:     23.227139
-write request average size:     22.422142
-read request average response time: 979424
-write request average response time: 3950245
+read request average size:     23.226936
+write request average size:     22.422192
+read request average response time: 996849
+write request average response time: 3505862
 buffer read hits:             0
 buffer read miss:             0
 buffer write hits:             0
 buffer write miss:             0
-erase:         21353
+erase:         18455

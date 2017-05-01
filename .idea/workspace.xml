@@ -12,16 +12,22 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="ac595b86-f11c-496d-860d-dd6fc91bbf32" name="Default" comment="">
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/HybridSSD.dir/flash.c.o" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/HybridSSD.dir/flash.c.o" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/HybridSSD.dir/initialize.c.o" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/HybridSSD.dir/initialize.c.o" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/HybridSSD.dir/pagemap.c.o" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/HybridSSD.dir/pagemap.c.o" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/HybridSSD.dir/ssd.c.o" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/HybridSSD.dir/ssd.c.o" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/cmake-build-debug/HybridSSD.exe" afterPath="$PROJECT_DIR$/cmake-build-debug/HybridSSD.exe" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/cmake-build-debug/ex.out" afterPath="$PROJECT_DIR$/cmake-build-debug/ex.out" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/cmake-build-debug/statistic10.dat" afterPath="$PROJECT_DIR$/cmake-build-debug/statistic10.dat" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/HybridSSD.dir/C.includecache" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/HybridSSD.dir/C.includecache" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/cmake-build-debug/HybridSSD.exe.stackdump" afterPath="$PROJECT_DIR$/cmake-build-debug/HybridSSD.exe.stackdump" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/cmake-build-debug/page.parameters" afterPath="$PROJECT_DIR$/cmake-build-debug/page.parameters" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/flash.c" afterPath="$PROJECT_DIR$/flash.c" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/initialize.c" afterPath="$PROJECT_DIR$/initialize.c" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/initialize.h" afterPath="$PROJECT_DIR$/initialize.h" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/pagemap.c" afterPath="$PROJECT_DIR$/pagemap.c" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/ssd.c" afterPath="$PROJECT_DIR$/ssd.c" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/ssd.h" afterPath="$PROJECT_DIR$/ssd.h" />
     </list>
     <ignored path="$PROJECT_DIR$/cmake-build-debug/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -34,13 +40,13 @@
   <component name="ExecutionTargetManager" SELECTED_TARGET="default_target" />
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="ssd.c" pinned="false" current-in-tab="true">
+      <file leaf-file-name="ssd.c" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/ssd.c">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="162">
-              <caret line="771" column="70" lean-forward="false" selection-start-line="771" selection-start-column="70" selection-end-line="771" selection-end-column="70" />
+            <state relative-caret-position="469">
+              <caret line="1227" column="27" lean-forward="true" selection-start-line="1227" selection-start-column="27" selection-end-line="1227" selection-end-column="27" />
               <folding>
-                <element signature="e#61084#61121#0" expanded="true" />
+                <element signature="e#61978#62015#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -49,7 +55,7 @@
       <file leaf-file-name="ssd.h" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/ssd.h">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="338">
+            <state relative-caret-position="308">
               <caret line="26" column="2" lean-forward="false" selection-start-line="26" selection-start-column="2" selection-end-line="26" selection-end-column="2" />
               <folding>
                 <element signature="e#1118#1137#0" expanded="true" />
@@ -61,17 +67,15 @@
       <file leaf-file-name="pagemap.c" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/pagemap.c">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="450">
-              <caret line="728" column="37" lean-forward="false" selection-start-line="728" selection-start-column="37" selection-end-line="728" selection-end-column="37" />
+            <state relative-caret-position="402">
+              <caret line="315" column="37" lean-forward="false" selection-start-line="315" selection-start-column="37" selection-end-line="315" selection-end-column="37" />
               <folding>
                 <element signature="e#1149#1168#0" expanded="true" />
-                <element signature="e#3105#3137#0" expanded="true" />
-                <element signature="e#4970#5105#0" expanded="true" />
-                <element signature="e#10383#10473#0" expanded="true" />
-                <element signature="e#15725#15767#0" expanded="true" />
-                <element signature="e#21212#21303#0" expanded="true" />
-                <element signature="e#23560#23827#0" expanded="true" />
-                <element signature="e#29463#29561#0" expanded="true" />
+                <element signature="e#10330#10422#0" expanded="true" />
+                <element signature="e#16132#16174#0" expanded="true" />
+                <element signature="e#21619#21710#0" expanded="true" />
+                <element signature="e#23967#24234#0" expanded="true" />
+                <element signature="e#29870#29968#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -80,8 +84,8 @@
       <file leaf-file-name="page.parameters" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/cmake-build-debug/page.parameters">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="774">
-              <caret line="89" column="54" lean-forward="false" selection-start-line="89" selection-start-column="54" selection-end-line="89" selection-end-column="54" />
+            <state relative-caret-position="444">
+              <caret line="91" column="20" lean-forward="false" selection-start-line="91" selection-start-column="20" selection-end-line="91" selection-end-column="20" />
               <folding />
             </state>
           </provider>
@@ -99,21 +103,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="license.txt" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/license.txt">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="0">
-              <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
       <file leaf-file-name="initialize.c" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/initialize.c">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="402">
-              <caret line="574" column="71" lean-forward="true" selection-start-line="574" selection-start-column="71" selection-end-line="574" selection-end-column="71" />
+            <state relative-caret-position="297">
+              <caret line="227" column="6" lean-forward="false" selection-start-line="227" selection-start-column="6" selection-end-line="227" selection-end-column="6" />
               <folding>
                 <element signature="e#1152#1171#0" expanded="true" />
               </folding>
@@ -124,8 +118,8 @@
       <file leaf-file-name="flash.h" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/flash.h">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="315">
-              <caret line="22" column="20" lean-forward="false" selection-start-line="22" selection-start-column="20" selection-end-line="22" selection-end-column="20" />
+            <state relative-caret-position="225">
+              <caret line="15" column="90" lean-forward="false" selection-start-line="15" selection-start-column="90" selection-end-line="15" selection-end-column="90" />
               <folding>
                 <marker date="1493544758466" expanded="true" signature="0:344" ph="/**...*/" />
               </folding>
@@ -145,11 +139,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="flash.c" pinned="false" current-in-tab="false">
+      <file leaf-file-name="flash.c" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/flash.c">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="180">
-              <caret line="12" column="72" lean-forward="false" selection-start-line="12" selection-start-column="72" selection-end-line="12" selection-end-column="72" />
+            <state relative-caret-position="199">
+              <caret line="558" column="0" lean-forward="false" selection-start-line="558" selection-start-column="0" selection-end-line="558" selection-end-column="0" />
               <folding>
                 <element signature="e#1120#1138#0" expanded="true" />
               </folding>
@@ -168,17 +162,17 @@
         <option value="$PROJECT_DIR$/CMakeLists.txt" />
         <option value="$PROJECT_DIR$/cmake-build-debug/HM_0" />
         <option value="$PROJECT_DIR$/page.parameters" />
-        <option value="$PROJECT_DIR$/flash.c" />
         <option value="$PROJECT_DIR$/avlTree.c" />
         <option value="$PROJECT_DIR$/avlTree.h" />
         <option value="$PROJECT_DIR$/flash.h" />
         <option value="$PROJECT_DIR$/pagemap.h" />
-        <option value="$PROJECT_DIR$/ssd.h" />
-        <option value="$PROJECT_DIR$/cmake-build-debug/page.parameters" />
         <option value="$PROJECT_DIR$/initialize.h" />
+        <option value="$PROJECT_DIR$/cmake-build-debug/page.parameters" />
         <option value="$PROJECT_DIR$/pagemap.c" />
         <option value="$PROJECT_DIR$/initialize.c" />
         <option value="$PROJECT_DIR$/ssd.c" />
+        <option value="$PROJECT_DIR$/ssd.h" />
+        <option value="$PROJECT_DIR$/flash.c" />
       </list>
     </option>
   </component>
@@ -220,6 +214,20 @@
             </PATH_ELEMENT>
             <PATH_ELEMENT>
               <option name="myItemId" value="HybridSSD" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="HybridSSD" />
+              <option name="myItemType" value="com.jetbrains.cidr.projectView.CidrFilesViewHelper$MyProjectTreeStructure$1" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="HybridSSD" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="cmake-build-debug" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -456,12 +464,12 @@
       <workItem from="1493292530652" duration="20328000" />
       <workItem from="1493379566354" duration="15311000" />
       <workItem from="1493450469400" duration="36518000" />
-      <workItem from="1493550431055" duration="13224000" />
+      <workItem from="1493550431055" duration="31498000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="85381000" />
+    <option name="totallyTimeSpent" value="103655000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -474,19 +482,20 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1936" height="1056" extended-state="6" />
+    <editor active="true" />
     <layout>
-      <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.23220153" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
+      <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.23210412" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.31236443" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="CMake" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32968238" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="CMake" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3286334" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.329718" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
-      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32968238" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.40563992" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
-      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32858709" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25373134" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
-      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.37458926" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.11353944" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3286334" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.318872" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3275488" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.11567164" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.37418655" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.1076759" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
-      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.39978093" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4295011" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Data View" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32995737" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
@@ -496,24 +505,24 @@
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
     </layout>
     <layout-to-restore>
-      <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.23318872" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
+      <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.23210412" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
-      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.31344903" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.31236443" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
-      <window_info id="CMake" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
+      <window_info id="CMake" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3286334" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.329718" sideWeight="0.5" order="9" side_tool="true" content_ui="tabs" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
-      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.5791757" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
-      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32936078" sideWeight="0.5" order="11" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.1609808" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3286334" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.318872" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3275488" sideWeight="0.5" order="11" side_tool="false" content_ui="tabs" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25373134" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
-      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.37527114" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.16471216" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.37418655" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.1076759" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
-      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.3991323" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Data View" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32995737" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
     </layout-to-restore>
   </component>
@@ -525,9 +534,13 @@
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
-      <option name="time" value="1" />
+      <option name="time" value="2" />
     </breakpoint-manager>
-    <watches-manager />
+    <watches-manager>
+      <configuration name="CMakeRunConfiguration">
+        <watch expression="ssd-&gt;dram-&gt;nvm_map-&gt;lru_tail-&gt;pre-&gt;lpn" language="ObjectiveC" />
+      </configuration>
+    </watches-manager>
   </component>
   <component name="editorHistoryManager">
     <entry file="file://$PROJECT_DIR$/ssd.c">
@@ -535,7 +548,7 @@
         <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
-            <element signature="e#61084#61121#0" expanded="true" />
+            <element signature="e#61978#62015#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -572,13 +585,11 @@
           <caret line="76" column="0" lean-forward="true" selection-start-line="76" selection-start-column="0" selection-end-line="76" selection-end-column="0" />
           <folding>
             <element signature="e#1149#1168#0" expanded="true" />
-            <element signature="e#3105#3137#0" expanded="true" />
-            <element signature="e#4970#5105#0" expanded="true" />
-            <element signature="e#10383#10473#0" expanded="true" />
-            <element signature="e#15725#15767#0" expanded="true" />
-            <element signature="e#21212#21303#0" expanded="true" />
-            <element signature="e#23560#23827#0" expanded="true" />
-            <element signature="e#29463#29561#0" expanded="true" />
+            <element signature="e#10330#10422#0" expanded="true" />
+            <element signature="e#16132#16174#0" expanded="true" />
+            <element signature="e#21619#21710#0" expanded="true" />
+            <element signature="e#23967#24234#0" expanded="true" />
+            <element signature="e#29870#29968#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -638,7 +649,7 @@
         <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
-            <element signature="e#61084#61121#0" expanded="true" />
+            <element signature="e#61978#62015#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -657,13 +668,11 @@
           <caret line="180" column="55" lean-forward="false" selection-start-line="180" selection-start-column="55" selection-end-line="180" selection-end-column="55" />
           <folding>
             <element signature="e#1149#1168#0" expanded="true" />
-            <element signature="e#3105#3137#0" expanded="true" />
-            <element signature="e#4970#5105#0" expanded="true" />
-            <element signature="e#10383#10473#0" expanded="true" />
-            <element signature="e#15725#15767#0" expanded="true" />
-            <element signature="e#21212#21303#0" expanded="true" />
-            <element signature="e#23560#23827#0" expanded="true" />
-            <element signature="e#29463#29561#0" expanded="true" />
+            <element signature="e#10330#10422#0" expanded="true" />
+            <element signature="e#16132#16174#0" expanded="true" />
+            <element signature="e#21619#21710#0" expanded="true" />
+            <element signature="e#23967#24234#0" expanded="true" />
+            <element signature="e#29870#29968#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -732,7 +741,7 @@
         <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
-            <element signature="e#61084#61121#0" expanded="true" />
+            <element signature="e#61978#62015#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -743,13 +752,11 @@
           <caret line="163" column="35" lean-forward="false" selection-start-line="163" selection-start-column="35" selection-end-line="163" selection-end-column="35" />
           <folding>
             <element signature="e#1149#1168#0" expanded="true" />
-            <element signature="e#3105#3137#0" expanded="true" />
-            <element signature="e#4970#5105#0" expanded="true" />
-            <element signature="e#10383#10473#0" expanded="true" />
-            <element signature="e#15725#15767#0" expanded="true" />
-            <element signature="e#21212#21303#0" expanded="true" />
-            <element signature="e#23560#23827#0" expanded="true" />
-            <element signature="e#29463#29561#0" expanded="true" />
+            <element signature="e#10330#10422#0" expanded="true" />
+            <element signature="e#16132#16174#0" expanded="true" />
+            <element signature="e#21619#21710#0" expanded="true" />
+            <element signature="e#23967#24234#0" expanded="true" />
+            <element signature="e#29870#29968#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -878,40 +885,12 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/flash.h">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="315">
-          <caret line="22" column="20" lean-forward="false" selection-start-line="22" selection-start-column="20" selection-end-line="22" selection-end-column="20" />
-          <folding>
-            <marker date="1493544758466" expanded="true" signature="0:344" ph="/**...*/" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/avlTree.h">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="345">
           <caret line="25" column="5" lean-forward="false" selection-start-line="25" selection-start-column="5" selection-end-line="25" selection-end-column="5" />
           <folding>
             <element signature="e#43#62#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/cmake-build-debug/page.parameters">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="774">
-          <caret line="89" column="54" lean-forward="false" selection-start-line="89" selection-start-column="54" selection-end-line="89" selection-end-column="54" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/ssd.h">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="338">
-          <caret line="26" column="2" lean-forward="false" selection-start-line="26" selection-start-column="2" selection-end-line="26" selection-end-column="2" />
-          <folding>
-            <element signature="e#1118#1137#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -926,49 +905,75 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/pagemap.c">
+    <entry file="file://$PROJECT_DIR$/flash.h">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="450">
-          <caret line="728" column="37" lean-forward="false" selection-start-line="728" selection-start-column="37" selection-end-line="728" selection-end-column="37" />
+        <state relative-caret-position="225">
+          <caret line="15" column="90" lean-forward="false" selection-start-line="15" selection-start-column="90" selection-end-line="15" selection-end-column="90" />
           <folding>
-            <element signature="e#1149#1168#0" expanded="true" />
-            <element signature="e#3105#3137#0" expanded="true" />
-            <element signature="e#4970#5105#0" expanded="true" />
-            <element signature="e#10383#10473#0" expanded="true" />
-            <element signature="e#15725#15767#0" expanded="true" />
-            <element signature="e#21212#21303#0" expanded="true" />
-            <element signature="e#23560#23827#0" expanded="true" />
-            <element signature="e#29463#29561#0" expanded="true" />
+            <marker date="1493544758466" expanded="true" signature="0:344" ph="/**...*/" />
           </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/initialize.c">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="402">
-          <caret line="574" column="71" lean-forward="true" selection-start-line="574" selection-start-column="71" selection-end-line="574" selection-end-column="71" />
+        <state relative-caret-position="297">
+          <caret line="227" column="6" lean-forward="false" selection-start-line="227" selection-start-column="6" selection-end-line="227" selection-end-column="6" />
           <folding>
             <element signature="e#1152#1171#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/flash.c">
+    <entry file="file://$PROJECT_DIR$/pagemap.c">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="180">
-          <caret line="12" column="72" lean-forward="false" selection-start-line="12" selection-start-column="72" selection-end-line="12" selection-end-column="72" />
+        <state relative-caret-position="402">
+          <caret line="315" column="37" lean-forward="false" selection-start-line="315" selection-start-column="37" selection-end-line="315" selection-end-column="37" />
           <folding>
-            <element signature="e#1120#1138#0" expanded="true" />
+            <element signature="e#1149#1168#0" expanded="true" />
+            <element signature="e#10330#10422#0" expanded="true" />
+            <element signature="e#16132#16174#0" expanded="true" />
+            <element signature="e#21619#21710#0" expanded="true" />
+            <element signature="e#23967#24234#0" expanded="true" />
+            <element signature="e#29870#29968#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/cmake-build-debug/page.parameters">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="444">
+          <caret line="91" column="20" lean-forward="false" selection-start-line="91" selection-start-column="20" selection-end-line="91" selection-end-column="20" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/ssd.h">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="308">
+          <caret line="26" column="2" lean-forward="false" selection-start-line="26" selection-start-column="2" selection-end-line="26" selection-end-column="2" />
+          <folding>
+            <element signature="e#1118#1137#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/ssd.c">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="162">
-          <caret line="771" column="70" lean-forward="false" selection-start-line="771" selection-start-column="70" selection-end-line="771" selection-end-column="70" />
+        <state relative-caret-position="469">
+          <caret line="1227" column="27" lean-forward="true" selection-start-line="1227" selection-start-column="27" selection-end-line="1227" selection-end-column="27" />
           <folding>
-            <element signature="e#61084#61121#0" expanded="true" />
+            <element signature="e#61978#62015#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/flash.c">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="199">
+          <caret line="558" column="0" lean-forward="false" selection-start-line="558" selection-start-column="0" selection-end-line="558" selection-end-column="0" />
+          <folding>
+            <element signature="e#1120#1138#0" expanded="true" />
           </folding>
         </state>
       </provider>

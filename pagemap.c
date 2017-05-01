@@ -163,6 +163,8 @@ int set_entry_state(struct ssd_info *ssd, unsigned int lsn, unsigned int size) {
     return state;
 }
 
+#undef DEBUG
+
 /**************************************************
 *读请求预处理函数，当读请求所读得页里面没有数据时，
 *需要预处理网该页里面写数据，以保证能读到数据
@@ -238,20 +240,22 @@ struct ssd_info *pre_process_page(struct ssd_info *ssd) {
                 if (ssd->dram->map->map_entry[lpn].state == 0 &&
                     ssd->dram->nvm_map->map_entry[lpn].state == 0) //this page is not in ssd yet
                 {
-                    //todo: map, don't need to care about LRU here
                     //the policy is to put small size original read request to nvm if nvm is capable to hold these page
                     //temporarily, the thersold is 4KB, or 8 sectors, or 1 page
                     //if the request size is larger than thersold or the nvm is full, do as original
                     if (size <= ssd->parameter->split_threshold && ssd->dram->nvm_map->valid_page_num > 0) {
 #ifdef DEBUG
                         printf("enter nvm pre process write, lpn = %d\n", lpn);
-                        getchar();
+                        //getchar();
 #endif
                         //here we simpily put these page in nvm sequentily
                         //todo: program & read count is needed to add later
+                        //here I need to maintain lru list
+                        update_lru(ssd, lpn, 1);
                         ppn = position_in_nvm;
                         ssd->nvm_write_count++;
                         ssd->dram->nvm_map->map_entry[lpn].pn = ppn;
+                        ssd->dram->nvm_map->map_entry[lpn].lpn = lpn;
                         ssd->dram->nvm_map->map_entry[lpn].state = set_entry_state(ssd, lsn, sub_size);   //0001
                         position_in_nvm++;
                         ssd->dram->nvm_map->valid_page_num--;
@@ -307,6 +311,14 @@ struct ssd_info *pre_process_page(struct ssd_info *ssd) {
     // }
     printf("\n");
     printf("pre_process is complete!\n");
+    printf("nvm usage: %d left\n", ssd->dram->nvm_map->valid_page_num);
+    struct entry *tmp = ssd->dram->nvm_map->lru_head->post;
+    while(tmp != ssd->dram->nvm_map->lru_tail){
+        //printf("%d->", tmp->lpn);
+        tmp = tmp->post;
+    }
+    printf("\n");
+    //pause();
     fclose(ssd->tracefile);
 
     for (i = 0; i < ssd->parameter->channel_number; i++)

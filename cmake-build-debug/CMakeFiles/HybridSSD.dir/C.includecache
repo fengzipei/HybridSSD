@@ -33,6 +33,8 @@ pagemap.h
 /cygdrive/c/Users/lab/CLionProjects/HybridSSD/initialize.c
 stdlib.h
 -
+unistd.h
+-
 initialize.h
 /cygdrive/c/Users/lab/CLionProjects/HybridSSD/initialize.h
 pagemap.h

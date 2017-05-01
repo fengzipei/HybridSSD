@@ -19,6 +19,7 @@ Hao Luo         2011/01/01        2.0           Change               luohao13568
 #define _CRTDBG_MAP_ALLOC
 
 #include <stdlib.h>
+#include <unistd.h>
 #include "initialize.h"
 #include "pagemap.h"
 
@@ -223,6 +224,8 @@ struct dram_info *initialize_dram(struct ssd_info *ssd) {
     memset(dram->nvm_map, 0, sizeof(struct nvm_map_info));
     page_num = ssd->parameter->page_block * ssd->parameter->block_plane * ssd->parameter->plane_die *
                ssd->parameter->die_chip * ssd->parameter->chip_num;
+    //printf("page num = %d\n", page_num);
+    //pause();
     dram->map->map_entry = (struct entry *) malloc(sizeof(struct entry) * page_num); //每个物理页和逻辑页都有对应关系
     dram->nvm_map->map_entry = (struct entry *) malloc(sizeof(struct entry) * page_num); //每个物理页和逻辑页都有对应关系
     alloc_assert(dram->map->map_entry, "dram->map->map_entry");
@@ -231,10 +234,10 @@ struct dram_info *initialize_dram(struct ssd_info *ssd) {
     memset(dram->nvm_map->map_entry, 0, sizeof(struct entry) * page_num);
     unsigned int i;
     //todo: nvm_map and flash map can use the same map, there is no need to split them for they won't mix
-    for (i = 0; i < page_num; i++) {
-        dram->map->map_entry[i].lpn = i;
-        dram->nvm_map->map_entry[i].lpn = i;
-    }
+    // for (i = 0; i < page_num; i++) {
+    //     dram->map->map_entry[i].lpn = i;
+    //     dram->nvm_map->map_entry[i].lpn = i;
+    // }
     dram->nvm_map->valid_page_num = ssd->parameter->nvm_page_num;
     initialize_lru(ssd);
     return dram;

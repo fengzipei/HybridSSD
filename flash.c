@@ -23,6 +23,9 @@ Hao Luo         2011/01/01        2.0           Change               luohao13568
 *这个函数只作用于写请求
 ***********************/
 Status allocate_location(struct ssd_info *ssd, struct sub_request *sub_req) {
+#ifdef DEBUG
+    printf("enter allocate location\n");
+#endif
     struct sub_request *update = NULL;
     unsigned int channel_num = 0, chip_num = 0, die_num = 0, plane_num = 0;
     struct local *location = NULL;
@@ -39,7 +42,16 @@ Status allocate_location(struct ssd_info *ssd, struct sub_request *sub_req) {
 		* 在动态分配中，因为页的更新操作使用不了copyback操作，
 		*需要产生一个读请求，并且只有这个读请求完成后才能进行这个页的写操作
 		*******************************************************************/
+
+#ifdef DEBUG
+        printf("enter dynamic allocation\n");
+#endif
+        //printf("error in allocate location, lpn = %d\n", sub_req->lpn);
         if (ssd->dram->map->map_entry[sub_req->lpn].state != 0) {
+
+#ifdef DEBUG
+            printf("enter read before write\n");
+#endif
             if ((sub_req->state & ssd->dram->map->map_entry[sub_req->lpn].state) !=
                 ssd->dram->map->map_entry[sub_req->lpn].state) {
                 ssd->read_count++;
@@ -85,8 +97,18 @@ Status allocate_location(struct ssd_info *ssd, struct sub_request *sub_req) {
 		*0：全动态分配
 		*1：表示channel定package，die，plane动态
 		****************************************/
+
+#ifdef DEBUG
+        printf("dynamic allocation: %d\n", ssd->parameter->dynamic_allocation);
+#endif
         switch (ssd->parameter->dynamic_allocation) {
+#ifdef DEBUG
+            printf("enter dynamic allocation\n");
+#endif
             case 0: {
+#ifdef DEBUG
+                printf("enter full dynamic location: case 0\n");
+#endif
                 sub_req->location->channel = -1;
                 sub_req->location->chip = -1;
                 sub_req->location->die = -1;
@@ -197,6 +219,7 @@ Status allocate_location(struct ssd_info *ssd, struct sub_request *sub_req) {
                 memset(update, 0, sizeof(struct sub_request));
 
                 if (update == NULL) {
+                    printf("update == NULL error\n");
                     return ERROR;
                 }
                 update->location = NULL;
@@ -243,6 +266,9 @@ Status allocate_location(struct ssd_info *ssd, struct sub_request *sub_req) {
             ssd->channel_head[sub_req->location->channel].subs_w_head = sub_req;
         }
     }
+#ifdef DEBUG
+    printf("leave allocate location\n");
+#endif
     return SUCCESS;
 }
 

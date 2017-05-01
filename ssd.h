@@ -55,3 +55,5 @@ struct ssd_info *make_aged(struct ssd_info *);
 struct ssd_info *no_buffer_distribute(struct ssd_info *);
 
 struct ssd_info *origin_no_buffer_distribute(struct ssd_info *);
+
+void update_lru(struct ssd_info *ssd, int lpn, int type);
