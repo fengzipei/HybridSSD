@@ -722,6 +722,7 @@ void statistic_output(struct ssd_info *ssd) {
     fprintf(ssd->outputfile, "---------------------------statistic data---------------------------\n");
     fprintf(ssd->outputfile, "min lsn: %13d\n", ssd->min_lsn);
     fprintf(ssd->outputfile, "max lsn: %13d\n", ssd->max_lsn);
+    fprintf(ssd->outputfile, "split threshhold: %13d\n", ssd->parameter->split_threshold);
     fprintf(ssd->outputfile, "migrate count: %13d\n", ssd->migrate_count);
     fprintf(ssd->outputfile, "migrate threshold: %13d\n", ssd->parameter->migrate_threshold);
     fprintf(ssd->outputfile, "remain threshold: %13d\n", ssd->parameter->remain_threshold);
@@ -763,8 +764,9 @@ void statistic_output(struct ssd_info *ssd) {
     fprintf(ssd->statisticfile, "---------------------------statistic data---------------------------\n");
     fprintf(ssd->statisticfile, "min lsn: %13d\n", ssd->min_lsn);
     fprintf(ssd->statisticfile, "max lsn: %13d\n", ssd->max_lsn);
-    fprintf(ssd->outputfile, "migrate threshold: %13d\n", ssd->parameter->migrate_threshold);
-    fprintf(ssd->outputfile, "remain threshold: %13d\n", ssd->parameter->remain_threshold);
+    fprintf(ssd->statisticfile, "split threshhold: %13d\n", ssd->parameter->split_threshold);
+    fprintf(ssd->statisticfile, "migrate threshold: %13d\n", ssd->parameter->migrate_threshold);
+    fprintf(ssd->statisticfile, "remain threshold: %13d\n", ssd->parameter->remain_threshold);
     fprintf(ssd->statisticfile, "nvm read count: %13d\n", ssd->nvm_read_count);
     fprintf(ssd->statisticfile, "nvm program count: %13d\n", ssd->nvm_write_count);
     fprintf(ssd->statisticfile, "read count: %13d\n", ssd->read_count);
@@ -1265,7 +1267,7 @@ struct ssd_info *no_buffer_distribute(struct ssd_info *ssd) {
                     req->nvm_end_time = ssd->current_time + 300;
                 }
             } else { //append write
-                if (ssd->dram->nvm_map->valid_page_num > 0 && req->size < 8) { //append write to nvm
+                if (ssd->dram->nvm_map->valid_page_num > 0 && req->size < ssd->parameter->split_threshold) { //append write to nvm
 #ifdef DEBUG
                     printf("enter nvm append write\n");
 #endif

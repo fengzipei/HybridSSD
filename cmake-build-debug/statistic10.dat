@@ -90,6 +90,54 @@ greed MPW command=1;            #1 for using multi-plane write greedily, 0 for n
 aged=0;                         #1 for making SSD aged, 0 for keeping SSD non-aged
 aged ratio=0.7;                #If we need to make SSD aged, set the aged ratio in advance
 nvm page = 65535 # the capacity of nvm is 256MB
+split threshold = 16; # decide where will a page place
 migrate threshold = 5;
 remain threshold = 5;
 -----------------------simulation output----------------------
+the 0 channel, 0 chip, 0 die, 2048 plane has :          2669 erase operations
+the 0 channel, 0 chip, 1 die, 2048 plane has :          2668 erase operations
+the 0 channel, 1 chip, 0 die, 2048 plane has :          2668 erase operations
+the 0 channel, 1 chip, 1 die, 2048 plane has :          2668 erase operations
+the 1 channel, 0 chip, 0 die, 2048 plane has :          2670 erase operations
+the 1 channel, 0 chip, 1 die, 2048 plane has :          2670 erase operations
+the 1 channel, 1 chip, 0 die, 2048 plane has :          2670 erase operations
+the 1 channel, 1 chip, 1 die, 2048 plane has :          2670 erase operations
+
+
+---------------------------statistic data---------------------------
+min lsn:             0
+max lsn:      29232672
+split threshhold:            16
+migrate threshold:             5
+remain threshold:             5
+nvm read count:        622313
+nvm program count:       1168495
+read count:       1443977
+program count:       4909489                        include the flash write count leaded by read requests
+the read operation leaded by un-covered update count:        256978
+erase count:         42713
+direct erase count:         26733
+copy back count:             0
+multi-plane program count:             0
+multi-plane read count:             0
+interleave count:             0
+interleave read count:             0
+interleave two plane and one program count:             0
+interleave two plane count:             0
+gc copy back count:             0
+write flash count:       4201142
+waste page count:             0
+interleave erase count:             0
+multiple plane erase count:             0
+interleave multiple plane erase count:             0
+read request count:        249162
+write request count:        750839
+read request average size:     23.227139
+write request average size:     22.422142
+read request average response time: 979424
+write request average response time: 3950245
+buffer read hits:             0
+buffer read miss:             0
+buffer write hits:             0
+buffer write miss:             0
+erase:         21353

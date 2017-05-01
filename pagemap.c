@@ -200,7 +200,11 @@ struct ssd_info *pre_process_page(struct ssd_info *ssd) {
     memset(size_splitter, 0, 10 * sizeof(int));
     while (fgets(buffer_request, 200, ssd->tracefile)) {
         sscanf(buffer_request, "%lld %d %d %d %d", &time, &device, &lsn, &size, &ope);
-        size_splitter[(((size % 32) - 1) / 8)]++;
+        if (size > 24) {
+            size_splitter[3]++;
+        } else {
+            size_splitter[(size - 1) / 8]++;
+        }
         fl++;
         trace_assert(time, device, lsn, size, ope);                         /*断言，当读到的time，device，lsn，size，ope不合法时就会处理*/
 
@@ -238,7 +242,7 @@ struct ssd_info *pre_process_page(struct ssd_info *ssd) {
                     //the policy is to put small size original read request to nvm if nvm is capable to hold these page
                     //temporarily, the thersold is 4KB, or 8 sectors, or 1 page
                     //if the request size is larger than thersold or the nvm is full, do as original
-                    if (size <= 8 && ssd->dram->nvm_map->valid_page_num > 0) {
+                    if (size <= ssd->parameter->split_threshold && ssd->dram->nvm_map->valid_page_num > 0) {
 #ifdef DEBUG
                         printf("enter nvm pre process write, lpn = %d\n", lpn);
                         getchar();
@@ -298,12 +302,11 @@ struct ssd_info *pre_process_page(struct ssd_info *ssd) {
             }//while(add_size<size)
         }//if(ope==1)
     }
-    for(i = 0; i < 10; i++) {
-        printf("%d | \n", size_splitter[i]);
-    }
+    // for(i = 0; i < 10; i++) {
+    //     printf("%d | \n", size_splitter[i]);
+    // }
     printf("\n");
     printf("pre_process is complete!\n");
-    pause();
     fclose(ssd->tracefile);
 
     for (i = 0; i < ssd->parameter->channel_number; i++)

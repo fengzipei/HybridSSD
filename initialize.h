@@ -167,7 +167,6 @@ struct ssd_info {
 
     unsigned int token;                  //在动态分配中，为防止每次分配在第一个channel需要维持一个令牌，每次从令牌所指的位置开始分配
     unsigned int gc_request;             //记录在SSD中，当前时刻有多少gc操作的请求
-
     unsigned int write_request_count;    //记录写操作的次数
     unsigned int read_request_count;     //记录读操作的次数
     int64_t write_avg;                   //记录用于计算写请求平均响应时间的时间
@@ -425,6 +424,7 @@ struct event_node {
 struct parameter_value {
     //when a page remains in the first <migrate_threshold> position of flash lru list for <reamain_threshold> request unit,
     // migrate this page from flash to nvm
+    unsigned int split_threshold;
     unsigned int migrate_threshold;
     unsigned int remain_threshold;
     unsigned int nvm_page_num; // page number in nvm

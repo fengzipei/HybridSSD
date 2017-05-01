@@ -546,6 +546,8 @@ struct parameter_value *load_parameters(char parameter_file[30]) {
             sscanf(buf + next_eql, "%d", &p->remain_threshold);
         } else if ((res_eql = strcmp(buf, "migrate threshold")) == 0) {
             sscanf(buf + next_eql, "%d", &p->migrate_threshold);
+        } else if ((res_eql = strcmp(buf, "split threshold")) == 0) {
+            sscanf(buf + next_eql, "%d", &p->split_threshold);
         } else if ((res_eql = strcmp(buf, "small large write")) == 0) {
             sscanf(buf + next_eql, "%d", &p->small_large_write);
         } else if ((res_eql = strcmp(buf, "active write threshold")) == 0) {
